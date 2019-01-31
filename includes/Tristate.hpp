@@ -16,4 +16,9 @@ namespace nts {
     };
 }
 
+nts::Tristate operator&(const nts::Tristate &lho, const nts::Tristate &rho);
+nts::Tristate operator|(const nts::Tristate &lho, const nts::Tristate &rho);
+nts::Tristate operator^(const nts::Tristate &lho, const nts::Tristate &rho);
+nts::Tristate operator~(const nts::Tristate &lho);
+
 #endif /* !TRISTATE_HPP_ */
