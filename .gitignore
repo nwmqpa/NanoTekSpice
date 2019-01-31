@@ -1,0 +1,9 @@
+CMakeLists.txt
+.vscode
+.idea
+nanotekspice
+cmake-build-debug/
+vgcore.*
+*.o
+*.so
+
