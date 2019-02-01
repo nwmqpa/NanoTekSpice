@@ -8,6 +8,7 @@
 #ifndef DUMMYCOMPONENT_HPP_
     #define DUMMYCOMPONENT_HPP_
 
+#include <vector>
 #include "IComponent.hpp"
 
 namespace nts {
@@ -22,6 +23,7 @@ namespace nts {
             std::unique_ptr<nts::IComponent> clone();
 
         private:
+            nts::Tristate pins[12];
     };
 }
 
