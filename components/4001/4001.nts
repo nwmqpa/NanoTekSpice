@@ -1,0 +1,40 @@
+# 4001 Chipset
+# Author: Thomas Nicollet
+
+.chipsets:
+input    1
+input    2
+nor       nor_1
+output   3
+
+input    5
+input    6
+nor       nor_2
+output   4
+
+input    8
+input    9
+nor       nor_3
+output   10
+
+input    12
+input    13
+nor       nor_4
+output   11
+
+.links:
+1:1    nor_1:1
+2:1    nor_1:2
+3:1    nor_1:3
+
+5:1    nor_2:1
+6:1    nor_2:2
+4:1    nor_2:3
+
+8:1    nor_3:1
+9:1    nor_3:2
+10:1    nor_3:3
+
+12:1    nor_4:1
+13:1    nor_4:2
+11:1    nor_4:3

@@ -7,3 +7,5 @@ vgcore.*
 *.o
 *.so
 
+.mypy_cache/
+*.pyc

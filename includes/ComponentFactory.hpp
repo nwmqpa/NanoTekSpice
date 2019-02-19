@@ -18,14 +18,16 @@ namespace nts {
     class ComponentFactory {
         public:
             ComponentFactory();
-            ~ComponentFactory() = default;
+            ~ComponentFactory();
 
             bool registerComponent(nts::IComponent *component, const std::string &name);
             std::unique_ptr<nts::IComponent> createComponent(const std::string &name, const std::string &value) const;
             std::vector<std::string> getNames() const;
             static nts::ComponentFactory *getFactory();
+            void registerPin(nts::Tristate *pin);
 
         private:
+            std::vector<nts::Tristate *> pins;
             static nts::ComponentFactory *singleton;
             std::map<std::string, nts::IComponent *> instances;
     };

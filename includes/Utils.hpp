@@ -21,6 +21,8 @@ nts::Debug& operator<<(nts::Debug &s, const T &x)
 {
 #   ifdef DEBUG
     std::cout << x;
+#   else
+    (void) x;
 #   endif
   return s;
 }
