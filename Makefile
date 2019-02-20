@@ -24,7 +24,9 @@ SRC		=			$(SRC_DIR)/main.cpp \
 					$(SRC_DIR)/AbstractComponent.cpp \
 					$(SRC_DIR)/PluginLoader.cpp \
 					$(SRC_DIR)/Utils.cpp \
-					$(SRC_DIR)/ComponentFactory.cpp
+					$(SRC_DIR)/ComponentFactory.cpp \
+					$(SRC_DIR)/Simulation.cpp \
+					$(SRC_DIR)/Parser.cpp
 
 CXXFLAGS	=			-g -I $(ROOT)/includes $(WARN) -std=gnu++17 -export-dynamic -Wall -Wextra
 
