@@ -5,10 +5,10 @@
 ** entrypoint
 */
 
-#include "ComponentOR.hpp"
+#include "ComponentNAND.hpp"
 #include "ComponentFactory.hpp"
 
 extern "C" void entrypoint(nts::ComponentFactory *factory)
 {
-    factory->registerComponent(new nts::ComponentOR(), std::string("or"));
+    factory->registerComponent(new nts::ComponentNAND(), std::string("nand"));
 }

@@ -1,0 +1,25 @@
+/*
+** EPITECH PROJECT, 2019
+** OOP_nanotekspice_2018
+** File description:
+** 4071Component
+*/
+
+#ifndef COMPONENTNOT_HPP_
+    #define COMPONENTNOT_HPP_
+
+#include <vector>
+#include "AbstractComponent.hpp"
+
+namespace nts {
+    class ComponentNOT : public nts::AbstractComponent {
+        public:
+            ComponentNOT();
+            ComponentNOT(const ComponentNOT &);
+            nts::Tristate compute(std::size_t pin = 1) final;
+            void dump() const;
+            std::unique_ptr<nts::IComponent> clone();
+    };
+}
+
+#endif /* !COMPONENT4071_HPP_ */

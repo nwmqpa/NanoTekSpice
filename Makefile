@@ -21,6 +21,7 @@ BUILD		=			$(ROOT)/build
 
 SRC		=			$(SRC_DIR)/main.cpp \
 					$(SRC_DIR)/Application.cpp \
+					$(SRC_DIR)/AbstractComponent.cpp \
 					$(SRC_DIR)/PluginLoader.cpp \
 					$(SRC_DIR)/Utils.cpp \
 					$(SRC_DIR)/ComponentFactory.cpp
@@ -61,7 +62,7 @@ release:				CXXFLAGS += -D INSTALL_PATH="$(INSTALL_PATH)"
 ## Directives
 ##
 
-all:					$(NAME) components
+all:					$(NAME) comps
 
 $(NAME):				$(OBJS)
 					$(V)printf "$(GREEN)Compile sources.$(WHITE)\n"
@@ -109,7 +110,13 @@ echo_d:
 echo_r:
 					$(V)printf "$(RED)RELEASE MODE initialized.$(WHITE)\n";
 
+comps:			
+					$(V)python component_generator
+					$(V)printf "$(GREEN)Generation components...\n$(WHITE)"
+					$(V)make --no-print-directory -C . components
+
 components:				$(SUBDIRS_COMP)
+
 
 $(SUBDIRS_COMP):
 					$(V)printf "$(BLUE)Building $@\n$(WHITE)"
@@ -125,4 +132,4 @@ install:				release plugins displayers
 					$(V)printf "$(GREEN)Done installing at $(INSTALL_PATH)\n$(WHITE)"
 
 
-.PHONY: 				clean fclean debug all re echo_debug buildrepo $(SUBDIRS_COMP) components install
+.PHONY: 				clean fclean debug all re echo_debug buildrepo $(SUBDIRS_COMP) components install comps

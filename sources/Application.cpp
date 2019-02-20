@@ -28,5 +28,8 @@ void nts::Application::setup() noexcept
 void nts::Application::run()
 {
     nts::debug << "Launching the application." << std::endl;
+    for (const std::string &name : factory.getNames()) {
+        nts::debug << name << std::endl;
+    }
     pluginLoader.unloadPlugins();
 }
