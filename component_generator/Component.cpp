@@ -18,10 +18,11 @@ void nts::Component{0}::dump() const
     nts::debug << "Dump of component {0}" << std::endl;
 }}
 
-std::unique_ptr<nts::IComponent> nts::Component{0}::clone()
+std::unique_ptr<nts::IComponent> nts::Component{0}::clone(const std::string &value)
 {{
     std::unique_ptr<nts::IComponent> component = std::make_unique<nts::Component{0}>(*this);
     auto factory = nts::ComponentFactory::getFactory();
+    (void) value;
 {1}
     return component;
 }}

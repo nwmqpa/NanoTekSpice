@@ -18,7 +18,7 @@ namespace nts {
             ComponentNAND(const ComponentNAND &);
             nts::Tristate compute(std::size_t pin = 1) final;
             void dump() const;
-            std::unique_ptr<nts::IComponent> clone();
+            std::unique_ptr<nts::IComponent> clone(const std::string &);
     };
 }
 

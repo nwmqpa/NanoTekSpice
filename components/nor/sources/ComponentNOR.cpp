@@ -24,9 +24,10 @@ void nts::ComponentNOR::dump() const
     nts::debug << "Dump of component NOR" << std::endl;
 }
 
-std::unique_ptr<nts::IComponent> nts::ComponentNOR::clone()
+std::unique_ptr<nts::IComponent> nts::ComponentNOR::clone(const std::string &value)
 {
     auto component = std::make_unique<nts::ComponentNOR>(*this);
+    (void) value;
     pins.resize(4);
     return component;
 }

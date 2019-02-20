@@ -24,9 +24,10 @@ void nts::ComponentNOT::dump() const
     nts::debug << "Dump of component NOT" << std::endl;
 }
 
-std::unique_ptr<nts::IComponent> nts::ComponentNOT::clone()
+std::unique_ptr<nts::IComponent> nts::ComponentNOT::clone(const std::string &value)
 {
     auto component = std::make_unique<nts::ComponentNOT>(*this);
+    (void) value;
     pins.resize(3);
     return component;
 }
