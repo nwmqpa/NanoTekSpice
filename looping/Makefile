@@ -2,7 +2,7 @@
 ## EPITECH PROJECT, 2017
 ## Makefile
 ## File description:
-## makefile of the source file
+## makefile of the {0}
 ##
 
 ROOT	=			.
@@ -11,12 +11,12 @@ SRC_DIR	=			sources
 
 CXX		=		g++
 
-NAME	=			../dummy.so
+NAME	=			../{0}.so
 
 BUILD	=			$(ROOT)/build
 
 SRC		=		$(SRC_DIR)/entrypoint.cpp \
-				$(SRC_DIR)/DummyComponent.cpp
+				{1}
 
 
 CXXFLAGS=			-g -I $(ROOT)/includes -I ../../includes $(WARN) -std=gnu++17 -fPIC

@@ -12,10 +12,19 @@
 nts::ComponentFactory *nts::ComponentFactory::singleton = nullptr;
 
 nts::ComponentFactory::ComponentFactory()
-    : instances()
+    : instances(),
+      pins()
 {
     if (singleton == nullptr)
         singleton = this;
+}
+
+nts::ComponentFactory::~ComponentFactory()
+{
+    for (; pins.size() != 0; ) {
+        delete pins.back();
+        pins.pop_back();
+    }
 }
 
 bool nts::ComponentFactory::registerComponent(nts::IComponent *component, const std::string &name)
@@ -37,6 +46,11 @@ bool nts::ComponentFactory::registerComponent(nts::IComponent *component, const 
     this->instances[name] = component;
     nts::debug << "Component " << name << " registered." << std::endl;
     return true;
+}
+
+void nts::ComponentFactory::registerPin(nts::Tristate *pin)
+{
+    pins.push_back(pin);
 }
 
 std::unique_ptr<nts::IComponent> nts::ComponentFactory::createComponent(const std::string &name, const std::string &value) const

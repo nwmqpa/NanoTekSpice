@@ -13,6 +13,8 @@ nts::Debug& operator<<(nts::Debug &s, std::ostream& (*f)(std::ostream &))
 {
 #ifdef DEBUG
     f(std::cout);
+#else
+    (void) f;
 #endif
     return s;
 }
@@ -21,6 +23,8 @@ nts::Debug& operator<<(nts::Debug &s, std::ostream& (*f)(std::ios &))
 {
 #ifdef DEBUG
     f(std::cout);
+#else
+    (void) f;
 #endif
     return s;
 }
@@ -29,6 +33,8 @@ nts::Debug& operator<<(nts::Debug &s, std::ostream& (*f)(std::ios_base &))
 {
 #ifdef DEBUG
     f(std::cout);
+#else
+    (void) f;
 #endif
     return s;
 }

@@ -5,10 +5,10 @@
 ** entrypoint
 */
 
-#include "DummyComponent.hpp"
+#include "Component4030.hpp"
 #include "ComponentFactory.hpp"
 
 extern "C" void entrypoint(nts::ComponentFactory *factory)
 {
-    factory->registerComponent(new nts::DummyComponent(), std::string("dummy"));
+    factory->registerComponent(new nts::Component4030(), std::string("4030"));
 }
