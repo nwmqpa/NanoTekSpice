@@ -19,12 +19,12 @@ bool Parser::isValidLine(const std::string &line)
 
     if (!line.compare(".chipsets:")) {
         if (_isChips)
-            std::cout << program_invocation_short_name << ": multiple \'.chipsets:\' definition." << std::endl;
+            std::cerr << program_invocation_short_name << ": multiple \'.chipsets:\' definition." << std::endl;
         return _isChips ? (_isChips = false) : (_isChips = true);
     }
     if (!line.compare(".links:")) {
         if (_isLinks)
-            std::cout << program_invocation_short_name << ": multiple \'.links:\' definition." << std::endl;
+            std::cerr << program_invocation_short_name << ": multiple \'.links:\' definition." << std::endl;
         return _isLinks ? (_isLinks = false) : (_isLinks = true);
     }
     if ((std::regex_match(line, match, chipReg)) || (std::regex_search(line, match, linkReg)))
@@ -41,17 +41,24 @@ bool Parser::isValidFile()
     // is component registered
     // component with same name
     // is output linked
+    if (!_isChips || !_isLinks) {
+        if (!_isChips)
+            std::cerr << program_invocation_short_name << ": no \'.chipsets:\' section found." << std::endl;
+        if (!_isLinks)
+            std::cerr << program_invocation_short_name << ": no \'.links:\' section found." << std::endl;
+        return false;
+    }
     return true;
 }
 
 bool Parser::isValidFilePath(const std::string &filePath)
 {
     if (!std::filesystem::exists(filePath)) {
-        std::cout << program_invocation_short_name << ": \'" << filePath << "\' doesn't exist." << std::endl;
+        std::cerr << program_invocation_short_name << ": \'" << filePath << "\' doesn't exist." << std::endl;
         return false;
     }
     if (std::filesystem::is_directory(filePath)) {
-        std::cout << program_invocation_short_name << ": \'" << filePath << "\' is a directory." << std::endl;
+        std::cerr << program_invocation_short_name << ": \'" << filePath << "\' is a directory." << std::endl;
         return false;
     }
     return true;
@@ -70,9 +77,8 @@ void Parser::cleanContent()
     std::smatch match;
 
     for (size_t i = 0; i != _fileContent.size(); i++) {
-        if (std::regex_search(_fileContent[i], match, reg)) {
+        if (std::regex_search(_fileContent[i], match, reg))
             _fileContent[i].resize(match.position());
-        }
         if (isUselessLine(_fileContent[i]))
             _fileContent.erase(_fileContent.begin() + i--);
     }
