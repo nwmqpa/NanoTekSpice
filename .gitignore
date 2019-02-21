@@ -6,6 +6,6 @@ cmake-build-debug/
 vgcore.*
 *.o
 *.so
-
+*.nts
 .mypy_cache/
 *.pyc
