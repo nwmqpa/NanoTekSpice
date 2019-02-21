@@ -13,6 +13,11 @@ nts::Component{0}::Component{0}()
 {{
 }}
 
+nts::Component{0}::Component{0}(const Component{0} &value)
+{{
+    (void) value;
+}}
+
 void nts::Component{0}::dump() const
 {{
     nts::debug << "Dump of component {0}" << std::endl;

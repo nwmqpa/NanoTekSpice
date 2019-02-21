@@ -12,6 +12,11 @@ nts::ComponentAND::ComponentAND()
 {
 }
 
+nts::ComponentAND::ComponentAND(const ComponentAND &value)
+{
+    (void) value;
+}
+
 nts::Tristate nts::ComponentAND::compute(std::size_t pin)
 {
     if (pins.at(1) != nullptr && pins.at(2) != nullptr && pins.at(3) != nullptr)

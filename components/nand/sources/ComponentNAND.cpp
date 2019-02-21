@@ -12,6 +12,11 @@ nts::ComponentNAND::ComponentNAND()
 {
 }
 
+nts::ComponentNAND::ComponentNAND(const ComponentNAND &value)
+{
+    (void) value;
+}
+
 nts::Tristate nts::ComponentNAND::compute(std::size_t pin)
 {
     if (pins.at(1) != nullptr && pins.at(2) != nullptr && pins.at(3) != nullptr)
