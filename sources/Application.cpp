@@ -21,6 +21,7 @@ nts::Application::Application()
 
 nts::Application::~Application()
 {
+    simulation.exit();
     pluginLoader.unloadPlugins();
 }
 
@@ -38,4 +39,5 @@ void nts::Application::run()
         nts::debug << name << std::endl;
     }
     simulation.setup();
+    simulation.run();
 }

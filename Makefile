@@ -24,6 +24,7 @@ SRC		=			$(SRC_DIR)/main.cpp \
 					$(SRC_DIR)/AbstractComponent.cpp \
 					$(SRC_DIR)/PluginLoader.cpp \
 					$(SRC_DIR)/Utils.cpp \
+					$(SRC_DIR)/Tristate.cpp \
 					$(SRC_DIR)/ComponentFactory.cpp \
 					$(SRC_DIR)/Simulation.cpp \
 					$(SRC_DIR)/Parser.cpp
@@ -71,7 +72,7 @@ $(NAME):				$(OBJS)
 					$(V)$(CXX) -o $(NAME) $(OBJS) $(LDFLAGS)
 					$(V)printf "$(GREEN)Linking obj and Libraries.$(WHITE)\n"
 
-debug: 					fclean echo_d $(NAME)
+debug: 					fclean echo_d $(NAME) comps
 
 release: 				fclean echo_r $(NAME)
 
