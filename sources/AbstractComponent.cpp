@@ -5,6 +5,7 @@
 ** AbstractComponent
 */
 
+#include <iostream>
 #include "AbstractComponent.hpp"
 #include "ComponentFactory.hpp"
 

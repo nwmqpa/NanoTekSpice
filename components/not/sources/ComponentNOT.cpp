@@ -33,6 +33,6 @@ std::unique_ptr<nts::IComponent> nts::ComponentNOT::clone(const std::string &val
 {
     auto component = std::make_unique<nts::ComponentNOT>(*this);
     (void) value;
-    pins.resize(3);
+    component.get()->pins.resize(3);
     return component;
 }
