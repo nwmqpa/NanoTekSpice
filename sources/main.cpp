@@ -5,17 +5,16 @@
 ** main
 */
 
-//#include "Application.hpp"
+#include "Application.hpp"
 #include "Simulation.hpp"
 
 int main(int __attribute__((unused)) ac, char *av[])
 {
-//    nts::Application app;
-//    app.setup();
-//    app.run();
-    Simulation s;
+    nts::Application app;
+    app.setup();
+    app.run();
 
-    s.getUserInput();
-    s.parser.parseFile(s.getLastInput());
-    s.parser.printContent();
+    //app.simulation.getUserInput();
+    //app.simulation.parser.parseFile(app.simulation.getLastInput());
+    //app.simulation.parser.printContent();
 }

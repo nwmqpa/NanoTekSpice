@@ -20,15 +20,17 @@
 #   include <iostream>
 #   include "ComponentFactory.hpp"
 #   include "PluginLoader.hpp"
+#   include "Simulation.hpp"
 
 namespace nts {
     class Application {
         public:
             Application();
-            ~Application() = default;
+            ~Application();
 
             void setup() noexcept;
             void run();
+            Simulation simulation;
 
         private:
             nts::ComponentFactory factory;

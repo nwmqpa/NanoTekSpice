@@ -12,7 +12,7 @@
 #include <vector>
 #include <map>
 #include <memory>
-#include "IComponent.hpp"
+#include "AbstractComponent.hpp"
 
 namespace nts {
     class ComponentFactory {

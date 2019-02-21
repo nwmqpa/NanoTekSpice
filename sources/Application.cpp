@@ -13,10 +13,16 @@
 #include "Utils.hpp"
 
 nts::Application::Application()
-    : factory(nts::ComponentFactory())
+    : simulation(Simulation())
+    , factory(nts::ComponentFactory())
     , pluginLoader(nwmqpa::PluginLoader())
     , isRunning(false)
 {}
+
+nts::Application::~Application()
+{
+    pluginLoader.unloadPlugins();
+}
 
 void nts::Application::setup() noexcept
 {
@@ -31,5 +37,5 @@ void nts::Application::run()
     for (const std::string &name : factory.getNames()) {
         nts::debug << name << std::endl;
     }
-    pluginLoader.unloadPlugins();
+    simulation.setup();
 }

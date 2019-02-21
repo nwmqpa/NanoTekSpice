@@ -39,7 +39,7 @@ bool nts::ComponentFactory::registerComponent(nts::IComponent *component, const 
     }
     for (auto &temp : this->instances) {
         if (temp.first.compare(name) == 0) {
-            std::cerr << "Canno register component: " << name << ", name already registered" << std::endl;
+            std::cerr << "Cannot register component: " << name << ", name already registered" << std::endl;
             return false;
         }
     }

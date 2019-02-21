@@ -9,6 +9,7 @@
     #define SIMULATION_HPP_
 
 #include "Parser.hpp"
+#include "ComponentFactory.hpp"
 
 class Simulation {
     public:
@@ -21,11 +22,12 @@ class Simulation {
         void simulate();
         void loop();
         void dump();
-        void setInput();
+        void setInput(const std::string &variable, const std::string &value);
         std::string getLastInput() const { return _lastInput; };
         void getUserInput();
         Parser parser;
     private:
+        std::vector<std::unique_ptr<nts::IComponent>> _components;
         std::string _lastInput;
 };
 
