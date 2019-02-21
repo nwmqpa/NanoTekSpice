@@ -12,6 +12,11 @@ nts::ComponentNOT::ComponentNOT()
 {
 }
 
+nts::ComponentNOT::ComponentNOT(const ComponentNOT &value)
+{
+    (void) value;
+}
+
 nts::Tristate nts::ComponentNOT::compute(std::size_t pin)
 {
     if (pins.at(2) != nullptr && pins.at(1) != nullptr)

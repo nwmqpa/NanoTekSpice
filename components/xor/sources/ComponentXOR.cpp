@@ -12,6 +12,11 @@ nts::ComponentXOR::ComponentXOR()
 {
 }
 
+nts::ComponentXOR::ComponentXOR(const ComponentXOR &value)
+{
+    (void) value;
+}
+
 nts::Tristate nts::ComponentXOR::compute(std::size_t pin)
 {
     if (pins.at(1) != nullptr && pins.at(2) != nullptr && pins.at(3) != nullptr)

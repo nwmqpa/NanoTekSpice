@@ -12,6 +12,11 @@ nts::ComponentXNOR::ComponentXNOR()
 {
 }
 
+nts::ComponentXNOR::ComponentXNOR(const ComponentXNOR &value)
+{
+    (void) value;
+}
+
 nts::Tristate nts::ComponentXNOR::compute(std::size_t pin)
 {
     if (pins.at(1) != nullptr && pins.at(2) != nullptr && pins.at(3) != nullptr)

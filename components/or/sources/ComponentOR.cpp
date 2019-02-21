@@ -12,6 +12,11 @@ nts::ComponentOR::ComponentOR()
 {
 }
 
+nts::ComponentOR::ComponentOR(const ComponentOR &value)
+{
+    (void) value;
+}
+
 nts::Tristate nts::ComponentOR::compute(std::size_t pin)
 {
     if (pins.at(1) != nullptr && pins.at(2) != nullptr && pins.at(3) != nullptr)
