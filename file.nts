@@ -1,0 +1,10 @@
+.chipsets:
+input a
+input b
+output s
+or gate
+
+.links :
+a:1 gate:1
+b:1 gate:2
+s:1 gate:3

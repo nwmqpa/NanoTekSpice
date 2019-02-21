@@ -101,12 +101,12 @@ class Application(object):
                     )
                 )
                 updates.append(
-                    "    gatesToUpdate.push_back(std::move({}));".format(gate['name'])
+                    "    component.get()->gatesToUpdate.push_back(std::move({}));".format(gate['name'])
                 )
             else:
                 if max_pin < int(gate['name']):
                     max_pin = int(gate['name'])
-        gates.insert(0, "    pins.resize({});".format(max_pin + 1))
+        gates.insert(0, "    component.get()->pins.resize({});".format(max_pin + 1))
         return gates, updates
 
     def compute_linking(self, lines):
@@ -115,9 +115,9 @@ class Application(object):
         for line in lines:
             links.append(
                 "    (*{}).setLink({}, *{}, {});".format(
-                    "this" if line["c1"].isdigit() and line["p1"] == 1 else line["c1"],
+                    "component" if line["c1"].isdigit() and line["p1"] == 1 else line["c1"],
                     line["c1"] if line["c1"].isdigit() and line["p1"] == 1 else line["p1"],
-                    "this" if line["c2"].isdigit() and line["p2"] == 1 else line["c2"],
+                    "component" if line["c2"].isdigit() and line["p2"] == 1 else line["c2"],
                     line["c2"] if line["c2"].isdigit() and line["p2"] == 1 else line["p2"]
                 )
             )

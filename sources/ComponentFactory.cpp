@@ -58,7 +58,7 @@ std::unique_ptr<nts::IComponent> nts::ComponentFactory::createComponent(const st
     try {
         return this->instances.at(name)->clone(value);
     } catch (const std::out_of_range &e) {
-        throw std::runtime_error("No such component");
+        throw std::runtime_error(std::string("No such component: ") + name);
     }
 }
 

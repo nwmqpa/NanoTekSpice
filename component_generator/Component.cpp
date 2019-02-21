@@ -25,7 +25,7 @@ void nts::Component{0}::dump() const
 
 std::unique_ptr<nts::IComponent> nts::Component{0}::clone(const std::string &value)
 {{
-    std::unique_ptr<nts::IComponent> component = std::make_unique<nts::Component{0}>(*this);
+    auto component = std::make_unique<nts::Component{0}>(*this);
     auto factory = nts::ComponentFactory::getFactory();
     (void) value;
 {1}
