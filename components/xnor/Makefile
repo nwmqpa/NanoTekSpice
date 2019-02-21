@@ -2,7 +2,7 @@
 ## EPITECH PROJECT, 2017
 ## Makefile
 ## File description:
-## makefile of the or
+## makefile of the xnor
 ##
 
 ROOT	=			.
@@ -11,12 +11,12 @@ SRC_DIR	=			sources
 
 CXX		=		g++
 
-NAME	=			../or.so
+NAME	=			../xnor.so
 
 BUILD	=			$(ROOT)/build
 
 SRC		=		$(SRC_DIR)/entrypoint.cpp \
-				$(SRC_DIR)/ComponentOR.cpp
+				$(SRC_DIR)/ComponentXNOR.cpp
 
 
 CXXFLAGS=			-g -I $(ROOT)/includes -I ../../includes $(WARN) -std=gnu++17 -fPIC
@@ -35,13 +35,13 @@ V		?=			@
 
 OBJS	=			$(patsubst $(SRC_DIR)/%.cpp, $(BUILD)/%.o, $(SRC))
 
-#COLOR
+#COLXNOR
 
 GREEN	=			\e[1;32m
 
 WHITE	=			\e[0m
 
-ORANGE	=			\e[1;33m
+XNORANGE	=			\e[1;33m
 
 RED 	=			\e[1;35m
 
@@ -54,14 +54,14 @@ all:				$(NAME)
 $(NAME):			$(OBJS)
 				$(V)printf "$(GREEN)Compile sources.$(WHITE)\n"
 				$(V)$(CXX) -o $(NAME) $(OBJS) $(LDFLAGS)
-				$(V)printf "$(GREEN)Linking obj or Libraries.$(WHITE)\n"
+				$(V)printf "$(GREEN)Linking obj xnor Libraries.$(WHITE)\n"
 
 debug: fclean echo_d $(NAME)
 
 $(BUILD)/$(NAME):	$(OBJS)
 					$(V)printf "$(GREEN)Compile sources.$(WHITE)\n"
 					$(V)$(CXX) -o $(BUILD)/$(NAME) $(OBJS) $(LDFLAGS)
-					$(V)printf "$(GREEN)Linking obj or Libraries.$(WHITE)\n"
+					$(V)printf "$(GREEN)Linking obj xnor Libraries.$(WHITE)\n"
 
 $(BUILD)/%.o:		$(SRC_DIR)/%.cpp
 					$(V)mkdir -p $(dir $@)
@@ -70,18 +70,18 @@ $(BUILD)/%.o:		$(SRC_DIR)/%.cpp
 
 clean:
 					$(V)rm -rf $(OBJS)
-					$(V)printf "$(ORANGE)Removing object files.$(WHITE)\n"
+					$(V)printf "$(XNORANGE)Removing object files.$(WHITE)\n"
 
 fclean: clean
 					$(V)rm -f $(BUILD)/$(NAME)
 					$(V)rm -f $(ROOT)/$(NAME)
-					$(V)printf "$(ORANGE)Removing binary file.$(WHITE)\n"
+					$(V)printf "$(XNORANGE)Removing binary file.$(WHITE)\n"
 
 re:	fclean
 					$(V)make --no-print-directory all
 
 echo_build:
-					$(V)printf "$(GREEN)Begin of the build !\n$(ORANGE)Warnings : \n$(WHITE)"
+					$(V)printf "$(GREEN)Begin of the build !\n$(XNORANGE)Warnings : \n$(WHITE)"
 
 echo_d:
 					$(V)printf "$(RED)DEBUG MODE initialized.$(WHITE)\n";

@@ -12,8 +12,8 @@
 nts::ComponentFactory *nts::ComponentFactory::singleton = nullptr;
 
 nts::ComponentFactory::ComponentFactory()
-    : instances(),
-      pins()
+: pins(),
+  instances()
 {
     if (singleton == nullptr)
         singleton = this;
@@ -56,8 +56,7 @@ void nts::ComponentFactory::registerPin(nts::Tristate *pin)
 std::unique_ptr<nts::IComponent> nts::ComponentFactory::createComponent(const std::string &name, const std::string &value) const
 {
     try {
-        auto clone = this->instances.at(name)->clone();
-        return clone;
+        return this->instances.at(name)->clone(value);
     } catch (const std::out_of_range &e) {
         throw std::runtime_error("No such component");
     }

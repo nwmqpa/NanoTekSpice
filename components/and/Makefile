@@ -11,12 +11,12 @@ SRC_DIR	=			sources
 
 CXX		=		g++
 
-NAME	=			../or.so
+NAME	=			../and.so
 
 BUILD	=			$(ROOT)/build
 
 SRC		=		$(SRC_DIR)/entrypoint.cpp \
-				$(SRC_DIR)/ComponentOR.cpp
+				$(SRC_DIR)/ComponentAND.cpp
 
 
 CXXFLAGS=			-g -I $(ROOT)/includes -I ../../includes $(WARN) -std=gnu++17 -fPIC
@@ -54,14 +54,14 @@ all:				$(NAME)
 $(NAME):			$(OBJS)
 				$(V)printf "$(GREEN)Compile sources.$(WHITE)\n"
 				$(V)$(CXX) -o $(NAME) $(OBJS) $(LDFLAGS)
-				$(V)printf "$(GREEN)Linking obj or Libraries.$(WHITE)\n"
+				$(V)printf "$(GREEN)Linking obj and Libraries.$(WHITE)\n"
 
 debug: fclean echo_d $(NAME)
 
 $(BUILD)/$(NAME):	$(OBJS)
 					$(V)printf "$(GREEN)Compile sources.$(WHITE)\n"
 					$(V)$(CXX) -o $(BUILD)/$(NAME) $(OBJS) $(LDFLAGS)
-					$(V)printf "$(GREEN)Linking obj or Libraries.$(WHITE)\n"
+					$(V)printf "$(GREEN)Linking obj and Libraries.$(WHITE)\n"
 
 $(BUILD)/%.o:		$(SRC_DIR)/%.cpp
 					$(V)mkdir -p $(dir $@)
