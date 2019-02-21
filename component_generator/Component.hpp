@@ -17,7 +17,7 @@ namespace nts {{
             Component{0}();
             Component{0}(const Component{0} &);
             void dump() const;
-            std::unique_ptr<nts::IComponent> clone();
+            std::unique_ptr<nts::IComponent> clone(const std::string &value);
     }};
 }}
 
