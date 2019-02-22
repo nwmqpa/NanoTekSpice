@@ -39,3 +39,13 @@ nts::Tristate operator~(const nts::Tristate &lho)
     return nts::Tristate::TRUE;
 }
 
+std::ostream &operator<<(std::ostream &stream, const nts::Tristate &rho)
+{
+    if (rho == nts::Tristate::UNDEFINED)
+        stream << "U";
+    else if (rho == nts::Tristate::TRUE)
+        stream << "1";
+    else
+        stream << "0";
+    return stream;
+}
