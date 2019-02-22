@@ -13,8 +13,4 @@ int main(int __attribute__((unused)) ac, char *av[])
     nts::Application app;
     app.setup();
     app.run();
-
-    //app.simulation.getUserInput();
-    //app.simulation.parser.parseFile(app.simulation.getLastInput());
-    //app.simulation.parser.printContent();
 }

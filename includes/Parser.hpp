@@ -17,6 +17,7 @@ class Parser {
         ~Parser() = default;
         void parseFile(const std::string &filePath);
         void printContent();
+        std::vector<std::string> getContent() const { return _fileContent; };
     private:
         bool isValidLine(const std::string &line);
         bool isValidFile();

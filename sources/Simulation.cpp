@@ -6,35 +6,63 @@
 */
 
 #include "Simulation.hpp"
+#include "Utils.hpp"
 #include <fstream>
 #include <iostream>
 #include <algorithm>
 
+void Simulation::setupChip(const std::string &line, std::string &type, std::string &name)
+{
+    size_t x;
+    size_t y;
+
+    x = line.find_first_of(" ");
+    y = line.find_first_of("\t");
+    if ((y < x) && (y != std::string::npos))
+        x = y;
+    type.assign(line.substr(0, x));
+    x = line.find_last_of(" ");
+    y = line.find_last_of("\t");
+    if ((y > x) && (y != std::string::npos))
+        x = y;
+    name.assign(line.substr(x + 1, std::string::npos));
+}
+
 void Simulation::setup()
 {
-    _components.push_back(std::move(nts::ComponentFactory::getFactory()->createComponent("4001", "")));
-    _components.push_back(std::move(nts::ComponentFactory::getFactory()->createComponent("4011", "")));
-    _components.push_back(std::move(nts::ComponentFactory::getFactory()->createComponent("4030", "")));
-    _components.push_back(std::move(nts::ComponentFactory::getFactory()->createComponent("4071", "")));
-    _components.push_back(std::move(nts::ComponentFactory::getFactory()->createComponent("and", "")));
-    _components.push_back(std::move(nts::ComponentFactory::getFactory()->createComponent("nand", "")));
-    _components.push_back(std::move(nts::ComponentFactory::getFactory()->createComponent("nor", "")));
-    _components.push_back(std::move(nts::ComponentFactory::getFactory()->createComponent("not", "")));
-    _components.push_back(std::move(nts::ComponentFactory::getFactory()->createComponent("or", "")));
-    _components.push_back(std::move(nts::ComponentFactory::getFactory()->createComponent("xnor", "")));
-    _components.push_back(std::move(nts::ComponentFactory::getFactory()->createComponent("xor", "")));
+    _parser.parseFile("or_gate3.nts");
+    std::vector<std::string> content = _parser.getContent();
+    std::string type;
+    std::string name;
+
+    for (std::string line : content) {
+        if (!line.compare(".links:"))
+            break;
+        if (line.find(" ") == std::string::npos && line.find("\t") == std::string::npos)
+            continue;
+        setupChip(line, type, name);
+        if (type.compare("input"))
+            _input.push_back(name);
+        if (type.compare("output"))
+            _output.push_back(name);
+        nts::debug << "type=" << type << " name=" << name << std::endl;
+        _components[name] = std::move(nts::ComponentFactory::getFactory()->createComponent(type, ""));
+    }
 }
 
 void Simulation::run()
 {
-    std::cout << "Simulation is running." << std::endl;
-    this->simulate();
+    nts::debug << "Simulation is running." << std::endl;
 }
 
 void Simulation::exit()
 {
-    for (int i = _components.size(); i; i--)
-        _components.pop_back();
+    for (auto i = _input.begin(); i != _input.end();)
+        i = _input.erase(i);
+    for (auto i = _output.begin(); i != _output.end();)
+        i = _output.erase(i);
+    for (auto i = _components.begin(); i != _components.end();)
+        i = _components.erase(i);
 }
 
 void Simulation::display()
@@ -42,8 +70,10 @@ void Simulation::display()
 
 void Simulation::simulate()
 {
-    for (auto &&components : _components)
-        components->compute();
+    for (auto i = _components.begin(); i != _components.end(); i++) {
+        auto cursor = i->first;
+        _components[cursor]->compute();
+    }
 }
 
 void Simulation::loop()
@@ -51,8 +81,10 @@ void Simulation::loop()
 
 void Simulation::dump()
 {
-    for (auto &&components : _components)
-        components->dump();
+    for (auto i = _components.begin(); i != _components.end(); i++) {
+        auto cursor = i->first;
+        _components[cursor]->dump();
+    }
 }
 
 void Simulation::setInput(const std::string &variable, const std::string &value)

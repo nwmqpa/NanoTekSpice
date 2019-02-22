@@ -10,7 +10,6 @@
 
 nts::ComponentOutput::ComponentOutput()
 {
-    pins.resize(1);
 }
 
 nts::ComponentOutput::ComponentOutput(const ComponentOutput &value)
@@ -32,6 +31,6 @@ std::unique_ptr<nts::IComponent> nts::ComponentOutput::clone(const std::string &
 {
     auto component = std::make_unique<nts::ComponentOutput>(*this);
     (void) value;
-    component.get()->pins.resize(1);
+    component.get()->pins.resize(2);
     return component;
 }

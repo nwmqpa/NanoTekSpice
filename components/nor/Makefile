@@ -35,13 +35,13 @@ V		?=			@
 
 OBJS	=			$(patsubst $(SRC_DIR)/%.cpp, $(BUILD)/%.o, $(SRC))
 
-#COLNOR
+#COLOR
 
 GREEN	=			\e[1;32m
 
 WHITE	=			\e[0m
 
-NORANGE	=			\e[1;33m
+ORANGE	=			\e[1;33m
 
 RED 	=			\e[1;35m
 
@@ -70,18 +70,18 @@ $(BUILD)/%.o:		$(SRC_DIR)/%.cpp
 
 clean:
 					$(V)rm -rf $(OBJS)
-					$(V)printf "$(NORANGE)Removing object files.$(WHITE)\n"
+					$(V)printf "$(ORANGE)Removing object files.$(WHITE)\n"
 
 fclean: clean
 					$(V)rm -f $(BUILD)/$(NAME)
 					$(V)rm -f $(ROOT)/$(NAME)
-					$(V)printf "$(NORANGE)Removing binary file.$(WHITE)\n"
+					$(V)printf "$(ORANGE)Removing binary file.$(WHITE)\n"
 
 re:	fclean
-					$(V)make --no-print-directnory all
+					$(V)make --no-print-directory all
 
 echo_build:
-					$(V)printf "$(GREEN)Begin of the build !\n$(NORANGE)Warnings : \n$(WHITE)"
+					$(V)printf "$(GREEN)Begin of the build !\n$(ORANGE)Warnings : \n$(WHITE)"
 
 echo_d:
 					$(V)printf "$(RED)DEBUG MODE initialized.$(WHITE)\n";

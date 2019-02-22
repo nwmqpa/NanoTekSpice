@@ -2,7 +2,7 @@
 ## EPITECH PROJECT, 2017
 ## Makefile
 ## File description:
-## makefile of the xnor
+## makefile of the input
 ##
 
 ROOT	=			.
@@ -11,12 +11,12 @@ SRC_DIR	=			sources
 
 CXX		=		g++
 
-NAME	=			../xnor.so
+NAME	=			../input.so
 
 BUILD	=			$(ROOT)/build
 
 SRC		=		$(SRC_DIR)/entrypoint.cpp \
-				$(SRC_DIR)/ComponentXNOR.cpp
+				$(SRC_DIR)/ComponentInput.cpp
 
 
 CXXFLAGS=			-g -I $(ROOT)/includes -I ../../includes $(WARN) -std=gnu++17 -fPIC
@@ -54,14 +54,14 @@ all:				$(NAME)
 $(NAME):			$(OBJS)
 				$(V)printf "$(GREEN)Compile sources.$(WHITE)\n"
 				$(V)$(CXX) -o $(NAME) $(OBJS) $(LDFLAGS)
-				$(V)printf "$(GREEN)Linking obj xnor Libraries.$(WHITE)\n"
+				$(V)printf "$(GREEN)Linking obj input Libraries.$(WHITE)\n"
 
 debug: fclean echo_d $(NAME)
 
 $(BUILD)/$(NAME):	$(OBJS)
 					$(V)printf "$(GREEN)Compile sources.$(WHITE)\n"
 					$(V)$(CXX) -o $(BUILD)/$(NAME) $(OBJS) $(LDFLAGS)
-					$(V)printf "$(GREEN)Linking obj xnor Libraries.$(WHITE)\n"
+					$(V)printf "$(GREEN)Linking obj input Libraries.$(WHITE)\n"
 
 $(BUILD)/%.o:		$(SRC_DIR)/%.cpp
 					$(V)mkdir -p $(dir $@)

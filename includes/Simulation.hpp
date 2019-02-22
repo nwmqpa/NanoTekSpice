@@ -10,11 +10,13 @@
 
 #include "Parser.hpp"
 #include "ComponentFactory.hpp"
+#include <map>
 
 class Simulation {
     public:
         Simulation() = default;
         ~Simulation() = default;
+        void setupChip(const std::string &line, std::string &type, std::string &name);
         void setup();
         void run();
         void exit();
@@ -25,10 +27,12 @@ class Simulation {
         void setInput(const std::string &variable, const std::string &value);
         std::string getLastInput() const { return _lastInput; };
         void getUserInput();
-        Parser parser;
     private:
-        std::vector<std::unique_ptr<nts::IComponent>> _components;
+        std::map<std::string, std::unique_ptr<nts::IComponent>> _components;
+        std::vector<std::string> _input;
+        std::vector<std::string> _output;
         std::string _lastInput;
+        Parser _parser;
 };
 
 #endif /* SIMULATION_HPP_ */
