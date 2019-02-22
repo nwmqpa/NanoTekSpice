@@ -19,6 +19,8 @@ namespace nts {
             ~AbstractComponent();
             nts::Tristate compute(std::size_t pin = 1) override;
             void setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin) override;
+            void setPinAt(std::size_t pin, nts::Tristate value);
+            nts::Tristate getOutput() const;
 
         protected:
             std::vector<nts::Tristate *> pins;

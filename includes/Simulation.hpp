@@ -28,7 +28,7 @@ class Simulation {
         void simulate();
         void loop();
         void dump();
-        void setInput(const std::string name, const std::string &value);
+        void setInput(const std::string &name, const std::string &value);
         void getUserInput();
     private:
         std::map<std::string, std::unique_ptr<nts::IComponent>> _components;

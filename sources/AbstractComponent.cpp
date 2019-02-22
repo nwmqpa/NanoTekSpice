@@ -36,3 +36,13 @@ void nts::AbstractComponent::setLink(std::size_t pin, nts::IComponent &other, st
     (static_cast<nts::AbstractComponent&> (other)).pins.at(otherPin) = tristate;
     ComponentFactory::getFactory()->registerPin(tristate);
 }
+
+void nts::AbstractComponent::setPinAt(std::size_t pin, nts::Tristate value)
+{
+    *(pins.at(pin)) = value;
+}
+
+nts::Tristate nts::AbstractComponent::getOutput() const
+{
+    return *(pins.at(1));
+}

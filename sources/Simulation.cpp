@@ -7,6 +7,7 @@
 
 #include "Simulation.hpp"
 #include "Utils.hpp"
+#include "AbstractComponent.hpp"
 #include <fstream>
 #include <iostream>
 #include <algorithm>
@@ -56,7 +57,7 @@ void Simulation::setupLinks()
 
 void Simulation::setup()
 {
-    _parser.parseFile("or_gate3.nts");
+    _parser.parseFile("file.nts");
 
     setupChipsets();
     setupLinks();
@@ -106,7 +107,12 @@ void Simulation::exit()
 }
 
 void Simulation::display()
-{}
+{
+    for (auto i = _output.begin(); i != _output.end(); i++) {
+        auto cursor = i->first;
+        std::cout << cursor << "=" << static_cast<nts::AbstractComponent *>(_output[cursor].get())->getOutput() << std::endl;
+    }
+}
 
 void Simulation::simulate()
 {
@@ -129,12 +135,12 @@ void Simulation::dump()
 
 void Simulation::setInput(const std::string &name, const std::string &value)
 {
-/*    if (!value.compare("0"))
-        getComponent(name)->setInput(nts::Tristate::FALSE);
+    if (!value.compare("0"))
+        static_cast<nts::AbstractComponent *>(getComponent(name))->setPinAt(1, nts::Tristate::FALSE);
     else if (!value.compare("1"))
-        getComponent(name)->setInput(nts::Tristate::TRUE);
+        static_cast<nts::AbstractComponent *>(getComponent(name))->setPinAt(1, nts::Tristate::TRUE);
     else
-        getComponent(name)->setInput(nts::Tristate::UNDEFINED);*/
+        static_cast<nts::AbstractComponent *>(getComponent(name))->setPinAt(1, nts::Tristate::UNDEFINED);
 }
 
 void Simulation::getUserInput()
