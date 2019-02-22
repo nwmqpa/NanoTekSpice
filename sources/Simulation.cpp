@@ -11,48 +11,62 @@
 #include <iostream>
 #include <algorithm>
 
-void Simulation::setupChip(const std::string &line, std::string &type, std::string &name)
+nts::IComponent *Simulation::getComponent(const std::string &name)
 {
-    size_t x;
-    size_t y;
+    for (auto i = _components.begin(); i != _components.end(); i++) {
+        auto cursor = i->first;
+        if (cursor == name)
+            return _components[cursor].get();
+    }
+    for (auto i = _input.begin(); i != _input.end(); i++) {
+        auto cursor = i->first;
+        if (cursor == name)
+            return _input[cursor].get();
+    }
+    for (auto i = _output.begin(); i != _output.end(); i++) {
+        auto cursor = i->first;
+        if (cursor == name)
+            return _output[cursor].get();
+    }
+    return nullptr;
+}
 
-    x = line.find_first_of(" ");
-    y = line.find_first_of("\t");
-    if ((y < x) && (y != std::string::npos))
-        x = y;
-    type.assign(line.substr(0, x));
-    x = line.find_last_of(" ");
-    y = line.find_last_of("\t");
-    if ((y > x) && (y != std::string::npos))
-        x = y;
-    name.assign(line.substr(x + 1, std::string::npos));
+void Simulation::setupChipsets()
+{
+    auto chipsets = _parser.getChipsets();
+
+    for (auto [type, name, param] : chipsets) {
+        if (!type.compare("input"))
+            _input[name] = std::move(nts::ComponentFactory::getFactory()->createComponent(type, param));
+        else if (!type.compare("output"))
+            _output[name] = std::move(nts::ComponentFactory::getFactory()->createComponent(type, param));
+        else
+            _components[name] = std::move(nts::ComponentFactory::getFactory()->createComponent(type, param));
+    }
+}
+
+void Simulation::setupLinks()
+{
+    auto links = _parser.getLinks();
+
+    for (auto [c1, p1, c2, p2] : links) {
+        getComponent(c1)->setLink(std::stoi(p1), *getComponent(c2), std::stoi(p2));
+    }
 }
 
 void Simulation::setup()
 {
     _parser.parseFile("or_gate3.nts");
-    std::vector<std::string> content = _parser.getContent();
-    std::string type;
-    std::string name;
 
-    for (std::string line : content) {
-        if (!line.compare(".links:"))
-            break;
-        if (line.find(" ") == std::string::npos && line.find("\t") == std::string::npos)
-            continue;
-        setupChip(line, type, name);
-        if (type.compare("input"))
-            _input.push_back(name);
-        if (type.compare("output"))
-            _output.push_back(name);
-        nts::debug << "type=" << type << " name=" << name << std::endl;
-        _components[name] = std::move(nts::ComponentFactory::getFactory()->createComponent(type, ""));
-    }
+    setupChipsets();
+    setupLinks();
 }
 
 void Simulation::run()
 {
     nts::debug << "Simulation is running." << std::endl;
+    this->dump();
+    this->simulate();
 }
 
 void Simulation::exit()

@@ -27,8 +27,13 @@ bool Parser::isValidLine(const std::string &line)
             std::cerr << program_invocation_short_name << ": multiple \'.links:\' definition." << std::endl;
         return _isLinks ? (_isLinks = false) : (_isLinks = true);
     }
-    if ((std::regex_match(line, match, chipReg)) || (std::regex_search(line, match, linkReg)))
+    if ((std::regex_match(line, match, chipReg)) || (std::regex_search(line, match, linkReg))) {
+        if (_isLinks)
+            _links.push_back(std::make_tuple(match[1], match[2], match[3], match[4]));
+        else
+            _chipsets.push_back(std::make_tuple(match[1], match[2], match[3]));
         return true;
+    }
     else
         return false;
 }

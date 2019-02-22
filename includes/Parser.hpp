@@ -10,6 +10,8 @@
 
 #include <string>
 #include <vector>
+#include <tuple>
+#include <map>
 
 class Parser {
     public:
@@ -18,6 +20,8 @@ class Parser {
         void parseFile(const std::string &filePath);
         void printContent();
         std::vector<std::string> getContent() const { return _fileContent; };
+        std::vector<std::tuple<std::string, std::string, std::string>> getChipsets() const { return _chipsets; };
+        std::vector<std::tuple<std::string, std::string, std::string, std::string>> getLinks() const { return _links; };
     private:
         bool isValidLine(const std::string &line);
         bool isValidFile();
@@ -27,6 +31,8 @@ class Parser {
         void getFileContent();
         std::string _filePath;
         std::vector<std::string> _fileContent;
+        std::vector<std::tuple<std::string, std::string, std::string>> _chipsets;
+        std::vector<std::tuple<std::string, std::string, std::string, std::string>> _links;
         bool _isChips;
         bool _isLinks;
 };
