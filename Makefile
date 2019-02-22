@@ -26,6 +26,8 @@ SRC		=			$(SRC_DIR)/main.cpp \
 					$(SRC_DIR)/Utils.cpp \
 					$(SRC_DIR)/Tristate.cpp \
 					$(SRC_DIR)/ComponentFactory.cpp \
+					$(SRC_DIR)/ComponentInput.cpp \
+					$(SRC_DIR)/ComponentOutput.cpp \
 					$(SRC_DIR)/Simulation.cpp \
 					$(SRC_DIR)/Parser.cpp
 
