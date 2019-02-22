@@ -60,13 +60,38 @@ void Simulation::setup()
 
     setupChipsets();
     setupLinks();
+    _isRunning = false;
+}
+
+void Simulation::actionChoice(const std::string &line, std::smatch match)
+{
+    if (!line.compare("dump"))
+        dump();
+    else if (!line.compare("exit"))
+        exit();
+    else if (!line.compare("simulate"))
+        simulate();
+    else if (!line.compare("loop"))
+        loop();
+    else if (!line.compare("display"))
+        display();
+    else
+        setInput(match[1], match[2]);
 }
 
 void Simulation::run()
 {
+    std::regex reg("(?:([a-zA-Z0-9_]+)=([01Uu]))|(dump|exit|simulate|loop|display)");
+    std::smatch match;
+
     nts::debug << "Simulation is running." << std::endl;
-    this->dump();
-    this->simulate();
+    while (!_isRunning) {
+        getUserInput();
+        if (std::regex_match(_lastInput, match, reg))
+            actionChoice(match[0], match);
+        else
+            std::cerr << program_invocation_short_name << ": " << _lastInput << ": invalid option." << std::endl;
+    }
 }
 
 void Simulation::exit()
@@ -77,6 +102,7 @@ void Simulation::exit()
         i = _output.erase(i);
     for (auto i = _components.begin(); i != _components.end();)
         i = _components.erase(i);
+    _isRunning = true;
 }
 
 void Simulation::display()
@@ -101,10 +127,14 @@ void Simulation::dump()
     }
 }
 
-void Simulation::setInput(const std::string &variable, const std::string &value)
+void Simulation::setInput(const std::string &name, const std::string &value)
 {
-    (void) variable;
-    (void) value;
+/*    if (!value.compare("0"))
+        getComponent(name)->setInput(nts::Tristate::FALSE);
+    else if (!value.compare("1"))
+        getComponent(name)->setInput(nts::Tristate::TRUE);
+    else
+        getComponent(name)->setInput(nts::Tristate::UNDEFINED);*/
 }
 
 void Simulation::getUserInput()

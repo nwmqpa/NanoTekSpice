@@ -21,7 +21,6 @@ nts::Application::Application()
 
 nts::Application::~Application()
 {
-    simulation.exit();
     pluginLoader.unloadPlugins();
 }
 

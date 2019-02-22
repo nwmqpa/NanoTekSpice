@@ -11,6 +11,7 @@
 #include "Parser.hpp"
 #include "ComponentFactory.hpp"
 #include <map>
+#include <regex>
 
 class Simulation {
     public:
@@ -20,14 +21,14 @@ class Simulation {
         void setupChipsets();
         void setupLinks();
         void setup();
+        void actionChoice(const std::string &line, std::smatch match);
         void run();
         void exit();
         void display();
         void simulate();
         void loop();
         void dump();
-        void setInput(const std::string &variable, const std::string &value);
-        std::string getLastInput() const { return _lastInput; };
+        void setInput(const std::string name, const std::string &value);
         void getUserInput();
     private:
         std::map<std::string, std::unique_ptr<nts::IComponent>> _components;
@@ -35,6 +36,7 @@ class Simulation {
         std::map<std::string, std::unique_ptr<nts::IComponent>> _output;
         std::string _lastInput;
         Parser _parser;
+        bool _isRunning;
 };
 
 #endif /* SIMULATION_HPP_ */

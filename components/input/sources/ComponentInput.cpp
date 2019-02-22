@@ -34,3 +34,7 @@ std::unique_ptr<nts::IComponent> nts::ComponentInput::clone(const std::string &v
     component.get()->pins.resize(2);
     return component;
 }
+
+void nts::ComponentInput::setInput(nts::Tristate value)
+{
+}
