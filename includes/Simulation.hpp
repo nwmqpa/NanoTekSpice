@@ -15,12 +15,12 @@
 
 class Simulation {
     public:
-        Simulation() = default;
+        Simulation();
         ~Simulation() = default;
         nts::IComponent *getComponent(const std::string &name);
         void setupChipsets();
         void setupLinks();
-        void setup();
+        void setup(int ac, char *av[]);
         void actionChoice(const std::string &line, std::smatch match);
         void run();
         void exit();
@@ -29,14 +29,13 @@ class Simulation {
         void loop();
         void dump();
         void setInput(const std::string &name, const std::string &value);
-        void getUserInput();
+        std::string getUserInput();
     private:
         std::map<std::string, std::unique_ptr<nts::IComponent>> _components;
-        std::map<std::string, std::unique_ptr<nts::IComponent>> _input;
-        std::map<std::string, std::unique_ptr<nts::IComponent>> _output;
-        std::string _lastInput;
+        std::map<std::string, std::unique_ptr<nts::IComponent>> _inputs;
+        std::map<std::string, std::unique_ptr<nts::IComponent>> _outputs;
         Parser _parser;
-        bool _isRunning;
+        bool _isReady;
 };
 
 #endif /* SIMULATION_HPP_ */

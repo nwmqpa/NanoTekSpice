@@ -11,6 +11,6 @@
 int main(int __attribute__((unused)) ac, char *av[])
 {
     nts::Application app;
-    app.setup();
+    app.setup(ac, av);
     app.run();
 }

@@ -13,9 +13,9 @@
 #include "Utils.hpp"
 
 nts::Application::Application()
-    : simulation(Simulation())
-    , factory(nts::ComponentFactory())
+    : factory(nts::ComponentFactory())
     , pluginLoader(nwmqpa::PluginLoader())
+    , simulation(Simulation())
     , isRunning(false)
 {}
 
@@ -24,11 +24,12 @@ nts::Application::~Application()
     pluginLoader.unloadPlugins();
 }
 
-void nts::Application::setup() noexcept
+void nts::Application::setup(int ac, char *av[]) noexcept
 {
     chdir(INSTALL_PATH_STR);
     nts::debug << "Path is: " << INSTALL_PATH_STR << std::endl;
     pluginLoader.loadPlugins<nts::ComponentFactory>(&factory, std::string("./components"));
+    simulation.setup(ac, av);
 }
 
 void nts::Application::run()
@@ -37,6 +38,5 @@ void nts::Application::run()
     for (const std::string &name : factory.getNames()) {
         nts::debug << name << std::endl;
     }
-    simulation.setup();
     simulation.run();
 }

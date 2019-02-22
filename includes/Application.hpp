@@ -28,13 +28,12 @@ namespace nts {
             Application();
             ~Application();
 
-            void setup() noexcept;
+            void setup(int ac, char *av[]) noexcept;
             void run();
-            Simulation simulation;
-
         private:
             nts::ComponentFactory factory;
             nwmqpa::PluginLoader pluginLoader;
+            Simulation simulation;
             bool isRunning;
     };
 }

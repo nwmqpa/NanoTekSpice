@@ -12,6 +12,14 @@
 #include <iostream>
 #include <algorithm>
 
+Simulation::Simulation()
+    : _components(std::map<std::string, std::unique_ptr<nts::IComponent>>())
+    , _inputs(std::map<std::string, std::unique_ptr<nts::IComponent>>())
+    , _outputs(std::map<std::string, std::unique_ptr<nts::IComponent>>())
+    , _parser(Parser())
+    , _isReady(false)
+{}
+
 nts::IComponent *Simulation::getComponent(const std::string &name)
 {
     for (auto i = _components.begin(); i != _components.end(); i++) {
@@ -19,15 +27,15 @@ nts::IComponent *Simulation::getComponent(const std::string &name)
         if (cursor == name)
             return _components[cursor].get();
     }
-    for (auto i = _input.begin(); i != _input.end(); i++) {
+    for (auto i = _inputs.begin(); i != _inputs.end(); i++) {
         auto cursor = i->first;
         if (cursor == name)
-            return _input[cursor].get();
+            return _inputs[cursor].get();
     }
-    for (auto i = _output.begin(); i != _output.end(); i++) {
+    for (auto i = _outputs.begin(); i != _outputs.end(); i++) {
         auto cursor = i->first;
         if (cursor == name)
-            return _output[cursor].get();
+            return _outputs[cursor].get();
     }
     return nullptr;
 }
@@ -38,9 +46,9 @@ void Simulation::setupChipsets()
 
     for (auto [type, name, param] : chipsets) {
         if (!type.compare("input"))
-            _input[name] = std::move(nts::ComponentFactory::getFactory()->createComponent(type, param));
+            _inputs[name] = std::move(nts::ComponentFactory::getFactory()->createComponent(type, param));
         else if (!type.compare("output"))
-            _output[name] = std::move(nts::ComponentFactory::getFactory()->createComponent(type, param));
+            _outputs[name] = std::move(nts::ComponentFactory::getFactory()->createComponent(type, param));
         else
             _components[name] = std::move(nts::ComponentFactory::getFactory()->createComponent(type, param));
     }
@@ -55,13 +63,27 @@ void Simulation::setupLinks()
     }
 }
 
-void Simulation::setup()
+void Simulation::setup(int ac, char *av[])
 {
-    _parser.parseFile("file.nts");
+    std::regex reg("([a-zA-Z0-9_]+)=([01])");
+    std::smatch match;
+    std::string line;
 
+    if (ac < 2) {
+        std::cerr << program_invocation_short_name << ": nts file not specified." << std::endl;
+        return;
+    }
+    _parser.parseFile(av[1]);
     setupChipsets();
     setupLinks();
-    _isRunning = false;
+    _isReady = true;
+    if (ac <= 2)
+        return;
+    for (int i = 2; i != ac; i++) {
+        line.assign(av[i]);
+        if (std::regex_match(line, match, reg))
+            setInput(match[1], match[2]);
+    }
 }
 
 void Simulation::actionChoice(const std::string &line, std::smatch match)
@@ -82,35 +104,43 @@ void Simulation::actionChoice(const std::string &line, std::smatch match)
 
 void Simulation::run()
 {
-    std::regex reg("(?:([a-zA-Z0-9_]+)=([01Uu]))|(dump|exit|simulate|loop|display)");
+    std::regex reg("(?:([a-zA-Z0-9_]+)=([01]))|(dump|exit|simulate|loop|display)");
     std::smatch match;
+    std::string line;
 
-    nts::debug << "Simulation is running." << std::endl;
-    while (!_isRunning) {
-        getUserInput();
-        if (std::regex_match(_lastInput, match, reg))
+    if (!_isReady)
+        return;
+    nts::debug << "Starting simulation..." << std::endl;
+    simulate();
+    display();
+    while (_isReady) {
+        if ((line = getUserInput()).empty()) {
+            exit();
+            return;
+        }
+        if (std::regex_match(line, match, reg))
             actionChoice(match[0], match);
         else
-            std::cerr << program_invocation_short_name << ": " << _lastInput << ": invalid option." << std::endl;
+            std::cerr << program_invocation_short_name << ": " << line << ": invalid option." << std::endl;
     }
 }
 
 void Simulation::exit()
 {
-    for (auto i = _input.begin(); i != _input.end();)
-        i = _input.erase(i);
-    for (auto i = _output.begin(); i != _output.end();)
-        i = _output.erase(i);
+    for (auto i = _inputs.begin(); i != _inputs.end();)
+        i = _inputs.erase(i);
+    for (auto i = _outputs.begin(); i != _outputs.end();)
+        i = _outputs.erase(i);
     for (auto i = _components.begin(); i != _components.end();)
         i = _components.erase(i);
-    _isRunning = true;
+    _isReady = false;
 }
 
 void Simulation::display()
 {
-    for (auto i = _output.begin(); i != _output.end(); i++) {
+    for (auto i = _outputs.begin(); i != _outputs.end(); i++) {
         auto cursor = i->first;
-        std::cout << cursor << "=" << static_cast<nts::AbstractComponent *>(_output[cursor].get())->getOutput() << std::endl;
+        std::cout << cursor << "=" << static_cast<nts::AbstractComponent *>(_outputs[cursor].get())->getOutput() << std::endl;
     }
 }
 
@@ -135,16 +165,21 @@ void Simulation::dump()
 
 void Simulation::setInput(const std::string &name, const std::string &value)
 {
+    if (getComponent(name) == nullptr) {
+        std::cerr << program_invocation_short_name << ": can\'t find \'" << name << "\'." << std::endl;
+        return;
+    }
     if (!value.compare("0"))
         static_cast<nts::AbstractComponent *>(getComponent(name))->setPinAt(1, nts::Tristate::FALSE);
-    else if (!value.compare("1"))
-        static_cast<nts::AbstractComponent *>(getComponent(name))->setPinAt(1, nts::Tristate::TRUE);
     else
-        static_cast<nts::AbstractComponent *>(getComponent(name))->setPinAt(1, nts::Tristate::UNDEFINED);
+        static_cast<nts::AbstractComponent *>(getComponent(name))->setPinAt(1, nts::Tristate::TRUE);
 }
 
-void Simulation::getUserInput()
+std::string Simulation::getUserInput()
 {
+    std::string line;
+
     std::cout << "> ";
-    std::getline(std::cin, _lastInput);
+    std::getline(std::cin, line);
+    return line;
 }
