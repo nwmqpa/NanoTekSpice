@@ -6,10 +6,21 @@
 */
 
 #include "Parser.hpp"
+#include "ComponentFactory.hpp"
 #include <filesystem>
 #include <iostream>
 #include <fstream>
 #include <regex>
+
+bool Parser::isValidType(const std::string &typeName)
+{
+    auto types = nts::ComponentFactory::getFactory()->getNames();
+
+    for (auto type : types)
+        if (!typeName.compare(type))
+            return true;
+    return false;
+}
 
 bool Parser::isAlreadyAdded(const std::string &name)
 {
@@ -37,16 +48,18 @@ bool Parser::isValidLine(const std::string &line)
     }
     if ((std::regex_match(line, match, chipReg)) || (std::regex_search(line, match, linkReg))) {
         if (!_isLinks && _isChips) {
-            if (isAlreadyAdded(match[2])) {
+            if (!isValidType(match[1])) {
+                std::cerr << program_invocation_short_name << ": \'" << match[1] << "\' component type is unknown." << std::endl;
+                return false;
+            } else if (isAlreadyAdded(match[2])) {
                 std::cerr << program_invocation_short_name << ": multiple \'" << match[2] << "\' definition." << std::endl;
                 return false;
-            } else   
+            } else
                 _chipsets.push_back(std::make_tuple(match[1], match[2], match[3]));
         } else if (_isLinks)
             _links.push_back(std::make_tuple(match[1], match[2], match[3], match[4]));
         return true;
-    }
-    else
+    } else
         return false;
 }
 
