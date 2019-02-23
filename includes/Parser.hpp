@@ -17,12 +17,11 @@ class Parser {
     public:
         Parser() = default;
         ~Parser() = default;
-        void parseFile(const std::string &filePath);
-        void printContent();
-        std::vector<std::string> getContent() const { return _fileContent; };
+        bool parseFile(const std::string &filePath);
         std::vector<std::tuple<std::string, std::string, std::string>> getChipsets() const { return _chipsets; };
         std::vector<std::tuple<std::string, std::string, std::string, std::string>> getLinks() const { return _links; };
     private:
+        bool isAlreadyAdded(const std::string &name);
         bool isValidLine(const std::string &line);
         bool isValidFile();
         bool isValidFilePath(const std::string &filePath);

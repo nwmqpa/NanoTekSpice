@@ -11,6 +11,14 @@
 #include <fstream>
 #include <regex>
 
+bool Parser::isAlreadyAdded(const std::string &name)
+{
+    for (auto line : _chipsets)
+        if (!name.compare(std::get<1>(line)))
+            return true;
+    return false;
+}
+
 bool Parser::isValidLine(const std::string &line)
 {
     std::regex chipReg("([a-zA-Z0-9_]+)[ \t]+([a-zA-Z0-9_]+)\\(?([\\w.]*)\\)?");
@@ -28,10 +36,14 @@ bool Parser::isValidLine(const std::string &line)
         return _isLinks ? (_isLinks = false) : (_isLinks = true);
     }
     if ((std::regex_match(line, match, chipReg)) || (std::regex_search(line, match, linkReg))) {
-        if (_isLinks)
+        if (!_isLinks && _isChips) {
+            if (isAlreadyAdded(match[2])) {
+                std::cerr << program_invocation_short_name << ": multiple \'" << match[2] << "\' definition." << std::endl;
+                return false;
+            } else   
+                _chipsets.push_back(std::make_tuple(match[1], match[2], match[3]));
+        } else if (_isLinks)
             _links.push_back(std::make_tuple(match[1], match[2], match[3], match[4]));
-        else
-            _chipsets.push_back(std::make_tuple(match[1], match[2], match[3]));
         return true;
     }
     else
@@ -44,7 +56,6 @@ bool Parser::isValidFile()
         if (!isValidLine(line))
             return false;
     // is component registered
-    // component with same name
     // is output linked
     if (!_isChips || !_isLinks) {
         if (!_isChips)
@@ -99,21 +110,16 @@ void Parser::getFileContent()
     cleanContent();
 }
 
-void Parser::parseFile(const std::string &filePath)
+bool Parser::parseFile(const std::string &filePath)
 {
     if (!isValidFilePath(filePath))
-        return;
+        return false;
     _filePath.assign(filePath);
     _fileContent.clear();
     _isChips = false;
     _isLinks = false;
     getFileContent();
     if (!isValidFile())
-        return;
-}
-
-void Parser::printContent()
-{
-    for (std::string line : _fileContent)
-        std::cout << "[" << line << "]" << std::endl;
+        return false;
+    return true;
 }

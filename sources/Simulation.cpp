@@ -73,7 +73,8 @@ void Simulation::setup(int ac, char *av[])
         std::cerr << program_invocation_short_name << ": nts file not specified." << std::endl;
         return;
     }
-    _parser.parseFile(av[1]);
+    if (!_parser.parseFile(av[1]))
+        return;
     setupChipsets();
     setupLinks();
     _isReady = true;
