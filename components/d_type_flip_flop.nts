@@ -1,0 +1,39 @@
+# DTypeFlipFlop component
+
+.chipsets:
+# clock
+input 1
+# data
+input 2
+# set
+input 3
+# reset
+input 4
+# q
+output 5
+# /q
+output 6
+
+not not_1
+
+nand nand_1
+nand nand_2
+or or_1
+or or_2
+
+sr_nand_latch sr_nand_latch_1
+
+.links:
+1:1 nand_1:1
+1:1 nand_2:1
+2:1 nand_1:2
+2:1 not_1:1
+not_1:2 nand_2:2
+3:1 or_1:1
+nand_1:3 or_1:2
+or_1:3 sr_nand_latch_1:1
+4:1 or_2:1
+nand_2:3 or_2:2
+or_2:3 sr_nand_latch_1:2
+sr_nand_latch_1:3 5:1
+sr_nand_latch_1:4 6:1

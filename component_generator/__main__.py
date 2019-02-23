@@ -4,6 +4,11 @@ import os
 import re
 
 
+def capitalize(value: str):
+    """Capitalize vaues."""
+    return "".join(list(map(lambda x: x.capitalize(), value.split("_"))))
+
+
 class Application(object):
     """Class defining the looping application."""
 
@@ -70,7 +75,7 @@ class Application(object):
             makefile = mR.read()
         makefile = makefile.format(
             component,
-            "$(SRC_DIR)/Component" + component.capitalize() + ".cpp"
+            "$(SRC_DIR)/Component" + capitalize(component) + ".cpp"
         )
         with open(folder + "/Makefile", "w") as mW:
             mW.write(makefile)
@@ -128,7 +133,7 @@ class Application(object):
         with open(sys.argv[0] + "/entrypoint.cpp", 'r') as mR:
             entrypoint = mR.read()
         entrypoint = entrypoint.format(
-            component.capitalize(),
+            capitalize(component),
             component.lower()
         )
         with open(folder + "/sources/entrypoint.cpp", "w") as mW:
@@ -137,19 +142,19 @@ class Application(object):
         with open(sys.argv[0] + "/Component.cpp", 'r') as mR:
             component_cpp = mR.read()
         component_cpp = component_cpp.format(
-            component.capitalize(),
+            capitalize(component),
             "\n".join(linking)
         )
-        with open(folder + "/sources/Component" + component.capitalize() + ".cpp", "w") as mW:
+        with open(folder + "/sources/Component" + capitalize(component) + ".cpp", "w") as mW:
             mW.write(component_cpp)
 
         with open(sys.argv[0] + "/Component.hpp", 'r') as mR:
             component_hpp = mR.read()
         component_hpp = component_hpp.format(
-            component.capitalize(),
+            capitalize(component),
             component.upper()
         )
-        with open(folder + "/includes/Component" + component.capitalize() + ".hpp", "w") as mW:
+        with open(folder + "/includes/Component" + capitalize(component) + ".hpp", "w") as mW:
             mW.write(component_hpp)
 
     def process_file(self, file_to_process):
@@ -175,7 +180,6 @@ class Application(object):
         for file in files:
             if file.find(".nts") != -1 and not os.path.exists("components/" + file.split(".")[0]):
                 self.process_file("components/" + file)
-
 
 
 if __name__ == "__main__":
