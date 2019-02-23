@@ -23,6 +23,7 @@ namespace nts {
             nts::Tristate getOutput() const;
 
         protected:
+            void recomputeGraph(nts::Tristate *oldPtr, nts::Tristate *newPtr);
             std::vector<nts::Tristate *> pins;
             std::vector<std::unique_ptr<nts::IComponent>> gatesToUpdate;
 

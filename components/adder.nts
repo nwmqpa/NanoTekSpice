@@ -1,0 +1,21 @@
+# Adder component
+
+.chipsets:
+input 1
+input 2
+input 3
+output 4
+output 5
+half_adder half_adder_1
+half_adder half_adder_2
+or or_1
+
+.links:
+1:1 half_adder_1:1
+2:1 half_adder_1:2
+3:1 half_adder_2:2
+half_adder_1:3 half_adder_2:1
+half_adder_2:3 4:1
+half_adder_1:4 or_1:1
+half_adder_2:4 or_1:2
+or_1:3 5:1
