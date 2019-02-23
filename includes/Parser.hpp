@@ -18,9 +18,11 @@ class Parser {
         Parser() = default;
         ~Parser() = default;
         bool parseFile(const std::string &filePath);
+        int countComponent(const std::string &name = "ALL");
         std::vector<std::tuple<std::string, std::string, std::string>> getChipsets() const { return _chipsets; };
         std::vector<std::tuple<std::string, std::string, std::string, std::string>> getLinks() const { return _links; };
     private:
+        bool isLinked(const std::string &name);
         bool isValidType(const std::string &typeName);
         bool isAlreadyAdded(const std::string &name);
         bool isValidLine(const std::string &line);

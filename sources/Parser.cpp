@@ -12,6 +12,15 @@
 #include <fstream>
 #include <regex>
 
+bool Parser::isLinked(const std::string &name)
+{
+    for (auto [c1, p1, c2, p2] : _links)
+        if (!name.compare(c1) || !name.compare(c2))
+            return true;
+    std::cerr << program_invocation_short_name << ": Output \'" << name << "\' is not linked to anything." << std::endl;
+    return false;
+}
+
 bool Parser::isValidType(const std::string &typeName)
 {
     auto types = nts::ComponentFactory::getFactory()->getNames();
@@ -68,8 +77,6 @@ bool Parser::isValidFile()
     for (std::string line : _fileContent)
         if (!isValidLine(line))
             return false;
-    // is component registered
-    // is output linked
     if (!_isChips || !_isLinks) {
         if (!_isChips)
             std::cerr << program_invocation_short_name << ": no \'.chipsets:\' section found." << std::endl;
@@ -77,6 +84,9 @@ bool Parser::isValidFile()
             std::cerr << program_invocation_short_name << ": no \'.links:\' section found." << std::endl;
         return false;
     }
+    for (auto [type, name, param] : _chipsets)
+        if (!type.compare("output") && !isLinked(name))
+            return false;
     return true;
 }
 
@@ -135,4 +145,16 @@ bool Parser::parseFile(const std::string &filePath)
     if (!isValidFile())
         return false;
     return true;
+}
+
+int Parser::countComponent(const std::string &name)
+{
+    int count = 0;
+
+    if (!name.compare("ALL"))
+        return _chipsets.size();
+    for (auto comp : _chipsets)
+        if (!name.compare(std::get<0>(comp)))
+            count++;
+    return count;
 }
