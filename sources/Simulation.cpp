@@ -65,9 +65,10 @@ void Simulation::setupLinks()
 
 void Simulation::setup(int ac, char *av[])
 {
-    std::regex reg("([a-zA-Z0-9_]+)=([01])");
+    std::regex reg("([a-zA-Z0-9_]+)=([01]?)");
     std::smatch match;
     std::string line;
+    std::vector<std::string> tmp;
 
     if (ac < 2) {
         std::cerr << program_invocation_short_name << ": nts file not specified." << std::endl;
@@ -77,13 +78,24 @@ void Simulation::setup(int ac, char *av[])
         return;
     setupChipsets();
     setupLinks();
-    _isReady = true;
-    if (ac <= 2)
+    if ((ac != (2 + _parser.countComponent("input")))) {
+        std::cerr << program_invocation_short_name << ": all inputs values must be specified (no more, no less)." << std::endl;
         return;
+    }
+    _isReady = true;
     for (int i = 2; i != ac; i++) {
         line.assign(av[i]);
-        if (std::regex_match(line, match, reg))
+        if (std::regex_match(line, match, reg) && !isValidArgument(tmp, match[1])) {
+            _isReady = false;
+            return;
+        } else if (!std::string(match[2]).empty()) {
             setInput(match[1], match[2]);
+            tmp.push_back(match[2]);
+        } else {
+            std::cerr << program_invocation_short_name << ": " << line << ": invalid option." << std::endl;
+            _isReady = false;
+            return;
+        }
     }
 }
 
@@ -110,15 +122,13 @@ void Simulation::run()
     std::string line;
 
     if (!_isReady)
-        return;
+        return exit();
     nts::debug << "Starting simulation..." << std::endl;
     simulate();
     display();
     while (_isReady) {
-        if ((line = getUserInput()).empty()) {
-            exit();
-            return;
-        }
+        if ((line = getUserInput()).empty())
+            return exit();
         if (std::regex_match(line, match, reg))
             actionChoice(match[0], match);
         else
@@ -183,4 +193,28 @@ std::string Simulation::getUserInput()
     std::cout << "> ";
     std::getline(std::cin, line);
     return line;
+}
+
+bool Simulation::isValidArgument(std::vector<std::string> &list, const std::string &name)
+{
+    auto chipsets = _parser.getChipsets();
+    bool inChips = false;
+
+    for (std::string elem : list) {
+        if (!name.compare(elem)) {
+            std::cerr << program_invocation_short_name << ": \'" << name << "\' value is set multiple times." << std::endl;
+            return false;
+        }
+    }
+    for (auto [cType, cName, cParam] : chipsets) {
+        if (!name.compare(cName)) {
+            inChips = true;
+            break;
+        }
+    }
+    if (!inChips) {
+        std::cerr << program_invocation_short_name << ": can\'t find \'" << name << "\'." << std::endl;
+        return false;
+    }
+    return true;
 }
