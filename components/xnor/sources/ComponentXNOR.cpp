@@ -10,11 +10,7 @@
 
 nts::ComponentXNOR::ComponentXNOR()
 {
-}
-
-nts::ComponentXNOR::ComponentXNOR(const ComponentXNOR &value)
-{
-    (void) value;
+    this->setName(std::string("xnor"));
 }
 
 nts::Tristate nts::ComponentXNOR::compute(std::size_t pin)
@@ -22,11 +18,6 @@ nts::Tristate nts::ComponentXNOR::compute(std::size_t pin)
     if (pins.at(1) != nullptr && pins.at(2) != nullptr && pins.at(3) != nullptr)
         *pins.at(3) = ~(*pins.at(1) ^ *pins.at(2));
     return *pins.at(pin);
-}
-
-void nts::ComponentXNOR::dump() const
-{
-    nts::debug << "Dump of component XNOR" << std::endl;
 }
 
 std::unique_ptr<nts::IComponent> nts::ComponentXNOR::clone(const std::string &value)

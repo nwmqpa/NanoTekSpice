@@ -10,11 +10,7 @@
 
 nts::ComponentNOR::ComponentNOR()
 {
-}
-
-nts::ComponentNOR::ComponentNOR(const ComponentNOR &value)
-{
-    (void) value;
+    this->setName(std::string("nor"));
 }
 
 nts::Tristate nts::ComponentNOR::compute(std::size_t pin)
@@ -22,11 +18,6 @@ nts::Tristate nts::ComponentNOR::compute(std::size_t pin)
     if (pins.at(1) != nullptr && pins.at(2) != nullptr && pins.at(3) != nullptr)
         *pins.at(3) = ~(*pins.at(1) | *pins.at(2));
     return *pins.at(pin);
-}
-
-void nts::ComponentNOR::dump() const
-{
-    nts::debug << "Dump of component NOR" << std::endl;
 }
 
 std::unique_ptr<nts::IComponent> nts::ComponentNOR::clone(const std::string &value)

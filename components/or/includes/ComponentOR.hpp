@@ -15,9 +15,7 @@ namespace nts {
     class ComponentOR : public nts::AbstractComponent {
         public:
             ComponentOR();
-            ComponentOR(const ComponentOR &);
             nts::Tristate compute(std::size_t pin = 1) final;
-            void dump() const;
             std::unique_ptr<nts::IComponent> clone(const std::string &);
     };
 }

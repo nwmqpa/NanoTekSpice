@@ -10,11 +10,7 @@
 
 nts::ComponentXOR::ComponentXOR()
 {
-}
-
-nts::ComponentXOR::ComponentXOR(const ComponentXOR &value)
-{
-    (void) value;
+    this->setName(std::string("xor"));
 }
 
 nts::Tristate nts::ComponentXOR::compute(std::size_t pin)
@@ -22,11 +18,6 @@ nts::Tristate nts::ComponentXOR::compute(std::size_t pin)
     if (pins.at(1) != nullptr && pins.at(2) != nullptr && pins.at(3) != nullptr)
         *pins.at(3) = *pins.at(1) ^ *pins.at(2);
     return *pins.at(pin);
-}
-
-void nts::ComponentXOR::dump() const
-{
-    nts::debug << "Dump of component XOR" << std::endl;
 }
 
 std::unique_ptr<nts::IComponent> nts::ComponentXOR::clone(const std::string &value)

@@ -10,11 +10,7 @@
 
 nts::ComponentOR::ComponentOR()
 {
-}
-
-nts::ComponentOR::ComponentOR(const ComponentOR &value)
-{
-    (void) value;
+    this->setName(std::string("or"));
 }
 
 nts::Tristate nts::ComponentOR::compute(std::size_t pin)
@@ -22,11 +18,6 @@ nts::Tristate nts::ComponentOR::compute(std::size_t pin)
     if (pins.at(1) != nullptr && pins.at(2) != nullptr && pins.at(3) != nullptr)
         *pins.at(3) = *pins.at(1) | *pins.at(2);
     return *pins.at(pin);
-}
-
-void nts::ComponentOR::dump() const
-{
-    nts::debug << "Dump of component OR" << std::endl;
 }
 
 std::unique_ptr<nts::IComponent> nts::ComponentOR::clone(const std::string &value)

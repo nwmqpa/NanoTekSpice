@@ -10,11 +10,7 @@
 
 nts::ComponentNAND::ComponentNAND()
 {
-}
-
-nts::ComponentNAND::ComponentNAND(const ComponentNAND &value)
-{
-    (void) value;
+    this->setName(std::string("nand"));
 }
 
 nts::Tristate nts::ComponentNAND::compute(std::size_t pin)
@@ -22,11 +18,6 @@ nts::Tristate nts::ComponentNAND::compute(std::size_t pin)
     if (pins.at(1) != nullptr && pins.at(2) != nullptr && pins.at(3) != nullptr)
         *pins.at(3) = ~(*pins.at(1) & *pins.at(2));
     return *pins.at(pin);
-}
-
-void nts::ComponentNAND::dump() const
-{
-    nts::debug << "Dump of component NAND" << std::endl;
 }
 
 std::unique_ptr<nts::IComponent> nts::ComponentNAND::clone(const std::string &value)

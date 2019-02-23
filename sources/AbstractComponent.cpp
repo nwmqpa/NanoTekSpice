@@ -14,6 +14,15 @@ nts::AbstractComponent::~AbstractComponent()
 {
 }
 
+nts::AbstractComponent::AbstractComponent()
+{
+}
+
+nts::AbstractComponent::AbstractComponent(const AbstractComponent &component)
+{
+    this->name = component.name;
+}
+
 nts::Tristate nts::AbstractComponent::compute(std::size_t pin)
 {
     for (auto &&gate : gatesToUpdate) {
@@ -62,4 +71,20 @@ void nts::AbstractComponent::recomputeGraph(nts::Tristate *oldPtr, nts::Tristate
     for (auto &&gate : gatesToUpdate) {
         (static_cast<nts::AbstractComponent *> (gate.get()))->recomputeGraph(oldPtr, newPtr);
     }
+}
+
+void nts::AbstractComponent::setName(const std::string &name)
+{
+    this->name = name;
+}
+
+void nts::AbstractComponent::dump() const
+{
+    std::cout << "Dump of component " << name << ":" << std::endl;
+    for (auto &&gate : gatesToUpdate) {
+        static_cast<nts::AbstractComponent *>(gate.get())->dump();
+    }
+    std::cout << "Pins:" << std::endl;
+    std::cout << pins << std::endl;
+    std::cout << "End of dump of component " << name << std::endl;
 }

@@ -49,3 +49,15 @@ std::ostream &operator<<(std::ostream &stream, const nts::Tristate &rho)
         stream << "0";
     return stream;
 }
+
+std::ostream &operator<<(std::ostream &stream, const std::vector<nts::Tristate *> &rho)
+{
+    stream << "[";
+    for (auto state : rho) {
+        if (state == nullptr)
+            continue;
+        stream << *state << ", ";
+    }
+    stream << "]";
+    return stream;
+}

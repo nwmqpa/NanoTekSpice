@@ -9,6 +9,7 @@
     #define TRISTATE_HPP_
 
 #include <iostream>
+#include <vector>
 
 namespace nts {
     enum Tristate {
@@ -23,6 +24,7 @@ nts::Tristate operator|(const nts::Tristate &lho, const nts::Tristate &rho);
 nts::Tristate operator^(const nts::Tristate &lho, const nts::Tristate &rho);
 nts::Tristate operator~(const nts::Tristate &lho);
 std::ostream &operator<<(std::ostream &stream, const nts::Tristate &rho);
+std::ostream &operator<<(std::ostream &stream, const std::vector<nts::Tristate *> &rho);
 
 
 #endif /* !TRISTATE_HPP_ */

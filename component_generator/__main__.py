@@ -143,7 +143,8 @@ class Application(object):
             component_cpp = mR.read()
         component_cpp = component_cpp.format(
             capitalize(component),
-            "\n".join(linking)
+            "\n".join(linking),
+            component.lower()
         )
         with open(folder + "/sources/Component" + capitalize(component) + ".cpp", "w") as mW:
             mW.write(component_cpp)

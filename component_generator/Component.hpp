@@ -15,8 +15,6 @@ namespace nts {{
     class Component{0} : public nts::AbstractComponent {{
         public:
             Component{0}();
-            Component{0}(const Component{0} &);
-            void dump() const;
             std::unique_ptr<nts::IComponent> clone(const std::string &value);
     }};
 }}

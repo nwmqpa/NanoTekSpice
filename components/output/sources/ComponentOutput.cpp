@@ -10,21 +10,12 @@
 
 nts::ComponentOutput::ComponentOutput()
 {
-}
-
-nts::ComponentOutput::ComponentOutput(const ComponentOutput &value)
-{
-    (void) value;
+    this->setName(std::string("output"));
 }
 
 nts::Tristate nts::ComponentOutput::compute(std::size_t pin)
 {
     return *pins.at(pin);
-}
-
-void nts::ComponentOutput::dump() const
-{
-    nts::debug << "Dump of component Output" << std::endl;
 }
 
 std::unique_ptr<nts::IComponent> nts::ComponentOutput::clone(const std::string &value)

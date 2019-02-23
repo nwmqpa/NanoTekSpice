@@ -15,9 +15,6 @@ namespace nts {
     class ComponentInput : public nts::AbstractComponent {
         public:
             ComponentInput();
-            ComponentInput(const ComponentInput &);
-            nts::Tristate compute(std::size_t pin = 1) final;
-            void dump() const;
             std::unique_ptr<nts::IComponent> clone(const std::string &);
             void setInput(nts::Tristate value);
     };

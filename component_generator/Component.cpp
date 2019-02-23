@@ -11,16 +11,7 @@
 
 nts::Component{0}::Component{0}()
 {{
-}}
-
-nts::Component{0}::Component{0}(const Component{0} &value)
-{{
-    (void) value;
-}}
-
-void nts::Component{0}::dump() const
-{{
-    nts::debug << "Dump of component {0}" << std::endl;
+    this->setName(std::string("{2}"));
 }}
 
 std::unique_ptr<nts::IComponent> nts::Component{0}::clone(const std::string &value)

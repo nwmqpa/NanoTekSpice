@@ -14,9 +14,7 @@ namespace nts {
     class ComponentXOR : public nts::AbstractComponent {
         public:
             ComponentXOR();
-            ComponentXOR(const ComponentXOR &);
             nts::Tristate compute(std::size_t pin = 1) final;
-            void dump() const;
             std::unique_ptr<nts::IComponent> clone(const std::string &);
     };
 }

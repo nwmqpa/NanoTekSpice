@@ -10,11 +10,7 @@
 
 nts::ComponentAND::ComponentAND()
 {
-}
-
-nts::ComponentAND::ComponentAND(const ComponentAND &value)
-{
-    (void) value;
+    this->setName(std::string("and"));
 }
 
 nts::Tristate nts::ComponentAND::compute(std::size_t pin)
@@ -22,11 +18,6 @@ nts::Tristate nts::ComponentAND::compute(std::size_t pin)
     if (pins.at(1) != nullptr && pins.at(2) != nullptr && pins.at(3) != nullptr)
         *pins.at(3) = *pins.at(1) & *pins.at(2);
     return *pins.at(pin);
-}
-
-void nts::ComponentAND::dump() const
-{
-    nts::debug << "Dump of component AND" << std::endl;
 }
 
 std::unique_ptr<nts::IComponent> nts::ComponentAND::clone(const std::string &value)

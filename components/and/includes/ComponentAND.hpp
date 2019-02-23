@@ -15,9 +15,7 @@ namespace nts {
     class ComponentAND : public nts::AbstractComponent {
         public:
             ComponentAND();
-            ComponentAND(const ComponentAND &);
             nts::Tristate compute(std::size_t pin = 1) final;
-            void dump() const;
             std::unique_ptr<nts::IComponent> clone(const std::string &);
     };
 }

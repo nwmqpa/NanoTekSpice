@@ -15,9 +15,7 @@ namespace nts {
     class ComponentNOR : public nts::AbstractComponent {
         public:
             ComponentNOR();
-            ComponentNOR(const ComponentNOR &);
             nts::Tristate compute(std::size_t pin = 1) final;
-            void dump() const;
             std::unique_ptr<nts::IComponent> clone(const std::string &value);
     };
 }

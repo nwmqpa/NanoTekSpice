@@ -1,0 +1,18 @@
+# 3 Nand Gate
+
+.chipsets:
+input 1
+input 2
+input 3
+
+and and_1
+nand nand_1
+
+output 4
+
+.links:
+1:1 and_1:1
+2:1 and_1:2
+3:1 nand_1:1
+and_1:3 nand_1:2
+nand_1:3 4:1

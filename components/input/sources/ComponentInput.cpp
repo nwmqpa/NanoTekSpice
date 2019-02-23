@@ -10,21 +10,7 @@
 
 nts::ComponentInput::ComponentInput()
 {
-}
-
-nts::ComponentInput::ComponentInput(const ComponentInput &value)
-{
-    (void) value;
-}
-
-nts::Tristate nts::ComponentInput::compute(std::size_t pin)
-{
-    return *pins.at(pin);
-}
-
-void nts::ComponentInput::dump() const
-{
-    nts::debug << "Dump of component Input" << std::endl;
+    this->setName(std::string("input"));
 }
 
 std::unique_ptr<nts::IComponent> nts::ComponentInput::clone(const std::string &value)
