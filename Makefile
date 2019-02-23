@@ -97,6 +97,7 @@ fclean: 				clean
 					$(V)for dir in $(SUBDIRS_COMP); do \
 						make --no-print-directory -C $$dir fclean; \
 					done
+					$(V)python component_generator fclean
 					$(V)rm -f $(BUILD)/$(NAME)
 					$(V)rm -f $(ROOT)/$(NAME)
 					$(V)printf "$(ORANGE)Removing binary file.$(WHITE)\n"

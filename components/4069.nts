@@ -1,0 +1,36 @@
+# 4069 Component
+
+.chipsets:
+input 1
+output 2
+input 3
+output 4
+input 5
+output 6
+output 8
+input 9
+output 10
+input 11
+output 12
+input 13
+
+not not_1
+not not_2
+not not_3
+not not_4
+not not_5
+not not_6
+
+.links:
+1:1 not_1:1
+2:1 not_1:2
+3:1 not_2:1
+4:1 not_2:2
+5:1 not_3:1
+6:1 not_3:2
+13:1 not_1:1
+12:1 not_1:2
+11:1 not_2:1
+10:1 not_2:2
+9:1 not_3:1
+8:1 not_3:2

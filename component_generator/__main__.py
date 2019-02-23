@@ -177,9 +177,15 @@ class Application(object):
     def run(self):
         """Run the application."""
         files = os.listdir("components")
-        for file in files:
-            if file.find(".nts") != -1 and not os.path.exists("components/" + file.split(".")[0]):
-                self.process_file("components/" + file)
+        try:
+            if sys.argv[1] == "fclean":
+                for file in files:
+                    if file.find(".nts") != -1 and os.path.exists("components/" + file.split(".")[0]):
+                        os.system("rm -rf components/" + file.split(".")[0])
+        except:
+            for file in files:
+                if file.find(".nts") != -1 and not os.path.exists("components/" + file.split(".")[0]):
+                    self.process_file("components/" + file)
 
 
 if __name__ == "__main__":
