@@ -18,8 +18,8 @@ not not_1
 
 nand nand_1
 nand nand_2
-or or_1
-or or_2
+xor or_1
+xor or_2
 
 sr_nand_latch sr_nand_latch_1
 

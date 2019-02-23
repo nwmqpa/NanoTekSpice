@@ -125,7 +125,6 @@ void Simulation::run()
         return exit();
     nts::debug << "Starting simulation..." << std::endl;
     simulate();
-    display();
     while (_isReady) {
         if ((line = getUserInput()).empty())
             return exit();
@@ -161,6 +160,7 @@ void Simulation::simulate()
         auto cursor = i->first;
         _components[cursor]->compute();
     }
+    display();
 }
 
 void Simulation::loop()
