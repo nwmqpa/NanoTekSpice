@@ -16,7 +16,7 @@ nts::ComponentFalse::ComponentFalse()
 nts::Tristate nts::ComponentFalse::compute(std::size_t pin)
 {
     if (pins.at(1) != nullptr)
-        *pins.at(1) = nts::Tristate::TRUE;
+        *pins.at(1) = nts::Tristate::FALSE;
     return *pins.at(pin);
 }
 
