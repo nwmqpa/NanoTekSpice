@@ -97,7 +97,7 @@ fclean: 				clean
 					$(V)for dir in $(SUBDIRS_COMP); do \
 						make --no-print-directory -C $$dir fclean; \
 					done
-					$(V)python component_generator fclean
+					$(V)python3 component_generator fclean
 					$(V)rm -f $(BUILD)/$(NAME)
 					$(V)rm -f $(ROOT)/$(NAME)
 					$(V)printf "$(ORANGE)Removing binary file.$(WHITE)\n"
@@ -115,7 +115,7 @@ echo_r:
 					$(V)printf "$(RED)RELEASE MODE initialized.$(WHITE)\n";
 
 comps:			
-					$(V)python component_generator
+					$(V)python3 component_generator
 					$(V)printf "$(GREEN)Generation components...\n$(WHITE)"
 					$(V)make --no-print-directory -C . components
 
