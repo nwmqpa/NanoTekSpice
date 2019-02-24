@@ -11,6 +11,10 @@
 #include <fstream>
 #include <iostream>
 #include <algorithm>
+#include <csignal>
+#include <unistd.h>
+
+bool isLoop;
 
 Simulation::Simulation()
     : _components(std::map<std::string, std::unique_ptr<nts::IComponent>>())
@@ -127,6 +131,7 @@ void Simulation::run()
     simulate();
     display();
     while (_isReady) {
+        std::cout << "> ";
         if ((line = getUserInput()).empty())
             return exit();
         if (std::regex_match(line, match, reg))
@@ -163,8 +168,24 @@ void Simulation::simulate()
     }
 }
 
+void loopStop(int sig)
+{
+    (void) sig;
+    isLoop = false;
+}
+
 void Simulation::loop()
-{}
+{
+    struct sigaction handler;
+
+    handler.sa_handler = loopStop;
+    sigemptyset(&handler.sa_mask);
+    handler.sa_flags = 0;
+    sigaction(SIGINT, &handler, NULL);
+    isLoop = true;
+    while (isLoop)
+        simulate();
+}
 
 void Simulation::dump()
 {
@@ -190,7 +211,6 @@ std::string Simulation::getUserInput()
 {
     std::string line;
 
-    std::cout << "> ";
     std::getline(std::cin, line);
     return line;
 }
