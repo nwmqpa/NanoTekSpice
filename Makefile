@@ -24,6 +24,7 @@ SRC		=			$(SRC_DIR)/main.cpp \
 					$(SRC_DIR)/AbstractComponent.cpp \
 					$(SRC_DIR)/PluginLoader.cpp \
 					$(SRC_DIR)/Utils.cpp \
+					$(SRC_DIR)/Exception.cpp \
 					$(SRC_DIR)/Tristate.cpp \
 					$(SRC_DIR)/ComponentFactory.cpp \
 					$(SRC_DIR)/Simulation.cpp \

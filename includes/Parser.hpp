@@ -17,7 +17,7 @@ class Parser {
     public:
         Parser() = default;
         ~Parser() = default;
-        bool parseFile(const std::string &filePath);
+        void parseFile(const std::string &filePath);
         int countComponent(const std::string &name = "ALL");
         std::vector<std::tuple<std::string, std::string, std::string>> getChipsets() const { return _chipsets; };
         std::vector<std::tuple<std::string, std::string, std::string, std::string>> getLinks() const { return _links; };
@@ -25,9 +25,9 @@ class Parser {
         bool isLinked(const std::string &name);
         bool isValidType(const std::string &typeName);
         bool isAlreadyAdded(const std::string &name);
-        bool isValidLine(const std::string &line);
-        bool isValidFile();
-        bool isValidFilePath(const std::string &filePath);
+        void isValidLine(const std::string &line);
+        void isValidFile();
+        void isValidFilePath(const std::string &filePath);
         bool isUselessLine(const std::string &line);
         void cleanContent();
         void getFileContent();

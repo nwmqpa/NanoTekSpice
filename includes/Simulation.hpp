@@ -31,7 +31,7 @@ class Simulation {
         void setInput(const std::string &name, const std::string &value);
         std::string getUserInput();
     private:
-        bool isValidArgument(std::vector<std::string> &list, const std::string &name);
+        void isValidArgument(std::vector<std::string> &list, const std::string &name);
         std::map<std::string, std::unique_ptr<nts::IComponent>> _components;
         std::map<std::string, std::unique_ptr<nts::IComponent>> _inputs;
         std::map<std::string, std::unique_ptr<nts::IComponent>> _outputs;

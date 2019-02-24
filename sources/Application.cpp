@@ -5,7 +5,7 @@
 ** Application
 */
 
-#include <exception>
+#include "Exception.hpp"
 #include <string.h>
 #include <unistd.h>
 #include <iostream>
@@ -29,7 +29,12 @@ void nts::Application::setup(int ac, char *av[]) noexcept
     chdir(INSTALL_PATH_STR);
     nts::debug << "Path is: " << INSTALL_PATH_STR << std::endl;
     pluginLoader.loadPlugins<nts::ComponentFactory>(&factory, std::string("./components"));
-    simulation.setup(ac, av);
+    try {
+        simulation.setup(ac, av);
+    } catch (nts::ArgsError const &error) {
+        std::cerr << program_invocation_short_name << ": " << error.what() << std::endl;
+        exit(84);
+    }
 }
 
 void nts::Application::run()

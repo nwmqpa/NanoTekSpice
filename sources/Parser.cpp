@@ -5,6 +5,7 @@
 ** Parser implementation
 */
 
+#include "Exception.hpp"
 #include "Parser.hpp"
 #include "ComponentFactory.hpp"
 #include <filesystem>
@@ -17,7 +18,6 @@ bool Parser::isLinked(const std::string &name)
     for (auto [c1, p1, c2, p2] : _links)
         if (!name.compare(c1) || !name.compare(c2))
             return true;
-    std::cerr << program_invocation_short_name << ": Output \'" << name << "\' is not linked to anything." << std::endl;
     return false;
 }
 
@@ -39,7 +39,7 @@ bool Parser::isAlreadyAdded(const std::string &name)
     return false;
 }
 
-bool Parser::isValidLine(const std::string &line)
+void Parser::isValidLine(const std::string &line)
 {
     std::regex chipReg("([a-zA-Z0-9_]+)[ \t]+([a-zA-Z0-9_]+)\\(?([\\w.]*)\\)?");
     std::regex linkReg("([a-zA-Z0-9_]+):([0-9]+)[ \t]+([a-zA-Z0-9_]+):([0-9]+)");
@@ -47,60 +47,54 @@ bool Parser::isValidLine(const std::string &line)
 
     if (!line.compare(".chipsets:")) {
         if (_isChips)
-            std::cerr << program_invocation_short_name << ": multiple \'.chipsets:\' definition." << std::endl;
-        return _isChips ? (_isChips = false) : (_isChips = true);
+            throw nts::SyntaxError("multiple \'.chipsets:\' definition.");
+        _isChips ? (_isChips = false) : (_isChips = true);
     }
     if (!line.compare(".links:")) {
         if (_isLinks)
-            std::cerr << program_invocation_short_name << ": multiple \'.links:\' definition." << std::endl;
-        return _isLinks ? (_isLinks = false) : (_isLinks = true);
+            throw nts::SyntaxError("multiple \'.links:\' definition.");
+        _isLinks ? (_isLinks = false) : (_isLinks = true);
     }
     if ((std::regex_match(line, match, chipReg)) || (std::regex_search(line, match, linkReg))) {
         if (!_isLinks && _isChips) {
-            if (!isValidType(match[1])) {
-                std::cerr << program_invocation_short_name << ": \'" << match[1] << "\' component type is unknown." << std::endl;
-                return false;
-            } else if (isAlreadyAdded(match[2])) {
-                std::cerr << program_invocation_short_name << ": multiple \'" << match[2] << "\' definition." << std::endl;
-                return false;
-            } else
+            if (!isValidType(match[1]))
+                throw nts::SyntaxError("\'" + std::string(match[1]) + "\' component type is unknown.");
+            else if (isAlreadyAdded(match[2]))
+                throw nts::SyntaxError("multiple \'" + std::string(match[2]) + "\' definition.");
+            else
                 _chipsets.push_back(std::make_tuple(match[1], match[2], match[3]));
         } else if (_isLinks)
             _links.push_back(std::make_tuple(match[1], match[2], match[3], match[4]));
-        return true;
-    } else
-        return false;
+    }
 }
 
-bool Parser::isValidFile()
+void Parser::isValidFile()
 {
-    for (std::string line : _fileContent)
-        if (!isValidLine(line))
-            return false;
+    for (std::string line : _fileContent) {
+        try {
+            isValidLine(line);
+        } catch (nts::SyntaxError const &error) {
+            std::cerr << program_invocation_short_name << ": " << error.what() << std::endl;
+            exit(84);
+        }
+    }
     if (!_isChips || !_isLinks) {
         if (!_isChips)
-            std::cerr << program_invocation_short_name << ": no \'.chipsets:\' section found." << std::endl;
+            throw nts::SyntaxError("no \'.chipsets:\' section found.");
         if (!_isLinks)
-            std::cerr << program_invocation_short_name << ": no \'.links:\' section found." << std::endl;
-        return false;
+            throw nts::SyntaxError("no \'.links:\' section found.");
     }
     for (auto [type, name, param] : _chipsets)
         if (!type.compare("output") && !isLinked(name))
-            return false;
-    return true;
+            throw nts::SyntaxError("Output \'" + name + "\' is not linked to anything.");
 }
 
-bool Parser::isValidFilePath(const std::string &filePath)
+void Parser::isValidFilePath(const std::string &filePath)
 {
-    if (!std::filesystem::exists(filePath)) {
-        std::cerr << program_invocation_short_name << ": \'" << filePath << "\' doesn't exist." << std::endl;
-        return false;
-    }
-    if (std::filesystem::is_directory(filePath)) {
-        std::cerr << program_invocation_short_name << ": \'" << filePath << "\' is a directory." << std::endl;
-        return false;
-    }
-    return true;
+    if (!std::filesystem::exists(filePath))
+        throw nts::FileError("\'" + filePath + "\' doesn't exist.");
+    if (std::filesystem::is_directory(filePath))
+        throw nts::FileError("\'" + filePath + "\' is a directory.");
 }
 
 bool Parser::isUselessLine(const std::string &line)
@@ -133,18 +127,25 @@ void Parser::getFileContent()
     cleanContent();
 }
 
-bool Parser::parseFile(const std::string &filePath)
+void Parser::parseFile(const std::string &filePath)
 {
-    if (!isValidFilePath(filePath))
-        return false;
+    try {
+        isValidFilePath(filePath);
+    } catch (nts::FileError const &error) {
+        std::cerr << program_invocation_short_name << ": " << error.what() << std::endl;
+        exit(84);
+    }
     _filePath.assign(filePath);
     _fileContent.clear();
     _isChips = false;
     _isLinks = false;
     getFileContent();
-    if (!isValidFile())
-        return false;
-    return true;
+    try {
+        isValidFile();
+    } catch (nts::SyntaxError const &error) {
+        std::cerr << program_invocation_short_name << ": " << error.what() << std::endl;
+        exit(84);
+    }
 }
 
 int Parser::countComponent(const std::string &name)
